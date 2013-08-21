@@ -1,8 +1,10 @@
-<h1>New log_file</h1>
+<h1>Upload log file</h1>
+
+<p>Please upload your logfile here.</p>
 
 <%= form_tag({action: :upload}, multipart: true) do %>
-  <%= file_field_tag 'log_file' %>
-  <%= submit_tag('upload') %>
+  <%= file_field_tag 'log_file' %><br>
+  <%= submit_tag('upload') %><br>
 <% end %>
 
 <%= link_to 'Back', log_files_path %>
