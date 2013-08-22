@@ -83,8 +83,14 @@ class LogFilesController < ApplicationController
   def upload
     uploaded_io = params[:log_file]
 
-    File.open(Rails.root.join('public', 'uploads', "#{Time.new.strftime("%Y-%m-%d-%H%M%S")}_#{uploaded_io.original_filename}"), 'w') do |file|
+    savedFileName = Rails.root.join('public', 'uploads', "#{Time.new.strftime("%Y-%m-%d-%H%M%S")}_#{uploaded_io.original_filename}")
+
+    File.open(savedFileName, 'w') do |file|
       file.write(uploaded_io.read)
     end
+    
+    processor = LogFileProcessor.new
+    
+    processor.processLogFile(savedFileName)
   end
 end
