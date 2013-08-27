@@ -36,7 +36,10 @@ class LogFileProcessor
   end
   
   def processSystemMessage(line)
-    line.match(/^\d\d:\d\d -!- (.*) \[(.*)@(.*)\]/)
+    userMatch = line.match(/^\d\d:\d\d -!- (.*?) \[(.*?)@(.*?)\]/)
+    if !userMatch
+      return
+    end
     
     newNick = Nick.new
     
