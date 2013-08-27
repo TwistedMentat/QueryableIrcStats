@@ -1,0 +1,27 @@
+<h1>Listing nicks</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Hostname</th>
+    <th>Username</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @nicks.each do |nick| %>
+  <tr>
+    <td><%= nick.name %></td>
+    <td><%= nick.hostname %></td>
+    <td><%= nick.username %></td>
+    <td><%= link_to 'Show', nick %></td>
+    <td><%= link_to 'Edit', edit_nick_path(nick) %></td>
+    <td><%= link_to 'Destroy', nick, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Nick', new_nick_path %>

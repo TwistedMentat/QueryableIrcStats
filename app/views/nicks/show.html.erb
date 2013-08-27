@@ -1,0 +1,20 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @nick.name %>
+</p>
+
+<p>
+  <b>Hostname:</b>
+  <%= @nick.hostname %>
+</p>
+
+<p>
+  <b>Username:</b>
+  <%= @nick.username %>
+</p>
+
+
+<%= link_to 'Edit', edit_nick_path(@nick) %> |
+<%= link_to 'Back', nicks_path %>
