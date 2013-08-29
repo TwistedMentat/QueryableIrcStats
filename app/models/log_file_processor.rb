@@ -41,6 +41,11 @@ class LogFileProcessor
       return
     end
     
+    alreadyExistingNicks = Nick.where("name = ? AND hostname = ?", $1, $3)
+    if alreadyExistingNicks.count > 0
+      return
+    end
+    
     newNick = Nick.new
     
     newNick.name = $1
