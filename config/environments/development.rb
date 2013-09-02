@@ -34,4 +34,8 @@ QueryableIrcStats::Application.configure do
 
   # Expands the lines which load the assets
   config.assets.debug = true
+  
+  # Create a new logging file
+  #config.logger = Log4r::Logger.new("Application Log")
+  config.log_level = :debug
 end
