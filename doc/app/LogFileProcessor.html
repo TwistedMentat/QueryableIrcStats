@@ -70,13 +70,21 @@
 
   <ul class="link-list">
     
+    <li><a href="#method-i-find_or_create_nick">#find_or_create_nick</a>
+    
+    <li><a href="#method-i-get_nick_with_just_name">#get_nick_with_just_name</a>
+    
+    <li><a href="#method-i-get_nick_with_name_and_hostname">#get_nick_with_name_and_hostname</a>
+    
     <li><a href="#method-i-processLogFile">#processLogFile</a>
     
-    <li><a href="#method-i-processSystemMessage">#processSystemMessage</a>
+    <li><a href="#method-i-process_emote">#process_emote</a>
     
     <li><a href="#method-i-process_join">#process_join</a>
     
     <li><a href="#method-i-process_quit">#process_quit</a>
+    
+    <li><a href="#method-i-process_system_message">#process_system_message</a>
     
   </ul>
 </nav>
@@ -154,6 +162,117 @@
       <h3 class="section-header">Public Instance Methods</h3>
 
     
+      <div id="method-i-find_or_create_nick" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">find_or_create_nick</span><span
+            class="method-args">(already_existing_nicks, name)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="find_or_create_nick-source">
+            <pre><span class="ruby-comment"># File app/models/log_file_processor.rb, line 104</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">find_or_create_nick</span>(<span class="ruby-identifier">already_existing_nicks</span>, <span class="ruby-identifier">name</span>)
+  <span class="ruby-identifier">new_nick</span> = <span class="ruby-constant">Nick</span>.<span class="ruby-identifier">new</span>
+
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">already_existing_nicks</span>.<span class="ruby-identifier">count</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>
+    <span class="ruby-identifier">new_nick</span> = <span class="ruby-identifier">already_existing_nicks</span>.<span class="ruby-identifier">first</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">new_nick</span>.<span class="ruby-identifier">name</span> = <span class="ruby-identifier">name</span>
+  
+    <span class="ruby-identifier">new_nick</span>.<span class="ruby-identifier">save</span>
+  <span class="ruby-keyword">end</span>
+  
+  <span class="ruby-keyword">return</span> <span class="ruby-identifier">new_nick</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- find_or_create_nick-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- find_or_create_nick-method -->
+
+    
+      <div id="method-i-get_nick_with_just_name" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">get_nick_with_just_name</span><span
+            class="method-args">(name)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="get_nick_with_just_name-source">
+            <pre><span class="ruby-comment"># File app/models/log_file_processor.rb, line 85</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">get_nick_with_just_name</span>(<span class="ruby-identifier">name</span>)
+  <span class="ruby-identifier">already_existing_nicks</span> = <span class="ruby-constant">Nick</span>.<span class="ruby-identifier">where</span>(<span class="ruby-string">&quot;name = ?&quot;</span>, <span class="ruby-identifier">name</span>)
+
+  <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">logger</span>.<span class="ruby-identifier">debug</span>(<span class="ruby-node">&quot;#{Time.now}nickname search #{name}&quot;</span>)
+
+  <span class="ruby-keyword">return</span> <span class="ruby-identifier">find_or_create_nick</span>(<span class="ruby-identifier">already_existing_nicks</span>, <span class="ruby-identifier">name</span>)      
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- get_nick_with_just_name-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- get_nick_with_just_name-method -->
+
+    
+      <div id="method-i-get_nick_with_name_and_hostname" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">get_nick_with_name_and_hostname</span><span
+            class="method-args">(name, username, hostname)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="get_nick_with_name_and_hostname-source">
+            <pre><span class="ruby-comment"># File app/models/log_file_processor.rb, line 93</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">get_nick_with_name_and_hostname</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">username</span>, <span class="ruby-identifier">hostname</span>)
+  <span class="ruby-identifier">already_existing_nicks</span> = <span class="ruby-constant">Nick</span>.<span class="ruby-identifier">where</span>(<span class="ruby-string">&quot;name = ? AND hostname = ?&quot;</span>, <span class="ruby-identifier">name</span>, <span class="ruby-identifier">hostname</span>)
+
+  <span class="ruby-identifier">new_nick</span> = <span class="ruby-identifier">find_or_create_nick</span>(<span class="ruby-identifier">already_existing_nicks</span>, <span class="ruby-identifier">name</span>)
+  <span class="ruby-identifier">new_nick</span>.<span class="ruby-identifier">username</span> = <span class="ruby-identifier">username</span>
+  <span class="ruby-identifier">new_nick</span>.<span class="ruby-identifier">hostname</span> = <span class="ruby-identifier">hostname</span>
+  <span class="ruby-identifier">new_nick</span>.<span class="ruby-identifier">save</span>
+  
+  <span class="ruby-keyword">return</span> <span class="ruby-identifier">new_nick</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- get_nick_with_name_and_hostname-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- get_nick_with_name_and_hostname-method -->
+
+    
       <div id="method-i-processLogFile" class="method-detail ">
         
         <div class="method-heading">
@@ -188,11 +307,16 @@
     <span class="ruby-keyword">end</span>
     
     <span class="ruby-keyword">if</span> <span class="ruby-identifier">line</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">/^\d\d:\d\d -!-/</span>) <span class="ruby-keyword">then</span>
-      <span class="ruby-identifier">processSystemMessage</span>(<span class="ruby-identifier">line</span>)
+      <span class="ruby-identifier">process_system_message</span>(<span class="ruby-identifier">line</span>)
+      <span class="ruby-keyword">next</span>
+    <span class="ruby-keyword">end</span>
+    
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">line</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">/^\d\d:\d\d  \*/</span>)
+      <span class="ruby-identifier">process_emote</span>(<span class="ruby-identifier">line</span>)
       <span class="ruby-keyword">next</span>
     <span class="ruby-keyword">end</span>
   
-    <span class="ruby-identifier">line</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">/^(\d\d):(\d\d) &lt;.(.*)&gt; (.*)/</span>)
+    <span class="ruby-identifier">line</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">/^(\d\d):(\d\d) &lt;.(.*?)&gt; (.*)/</span>)
     <span class="ruby-identifier">newMessage</span> = <span class="ruby-constant">Message</span>.<span class="ruby-identifier">new</span>
 
     <span class="ruby-identifier">newMessage</span>.<span class="ruby-identifier">nick</span> = <span class="ruby-node">$3</span>
@@ -214,10 +338,10 @@
       </div><!-- processLogFile-method -->
 
     
-      <div id="method-i-processSystemMessage" class="method-detail ">
+      <div id="method-i-process_emote" class="method-detail ">
         
         <div class="method-heading">
-          <span class="method-name">processSystemMessage</span><span
+          <span class="method-name">process_emote</span><span
             class="method-args">(line)</span>
           <span class="method-click-advice">click to toggle source</span>
         </div>
@@ -229,46 +353,35 @@
           
 
           
-          <div class="method-source-code" id="processSystemMessage-source">
-            <pre><span class="ruby-comment"># File app/models/log_file_processor.rb, line 40</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">processSystemMessage</span>(<span class="ruby-identifier">line</span>)
-  <span class="ruby-identifier">user_match</span> = <span class="ruby-identifier">line</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">/^(\d\d):(\d\d) -!- (.*?) \[(.*?)@(.*?)\]/</span>)
-  <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">user_match</span>
-    <span class="ruby-keyword">return</span>
-  <span class="ruby-keyword">end</span>
-  
-  <span class="ruby-identifier">hour</span> = <span class="ruby-node">$1</span>
-  <span class="ruby-identifier">minute</span> = <span class="ruby-node">$2</span>
-  
-  <span class="ruby-identifier">new_nick</span> = <span class="ruby-constant">Nick</span>.<span class="ruby-identifier">new</span>
-  <span class="ruby-identifier">already_existing_nicks</span> = <span class="ruby-constant">Nick</span>.<span class="ruby-identifier">where</span>(<span class="ruby-string">&quot;name = ? AND hostname = ?&quot;</span>, <span class="ruby-node">$3</span>, <span class="ruby-node">$5</span>)
+          <div class="method-source-code" id="process_emote-source">
+            <pre><span class="ruby-comment"># File app/models/log_file_processor.rb, line 45</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">process_emote</span>(<span class="ruby-identifier">line</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">line</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">/^(\d\d):(\d\d)  \* ([\w\d]*?) (.*)/</span>)
+    <span class="ruby-identifier">nick</span> = <span class="ruby-identifier">get_nick_with_just_name</span>(<span class="ruby-node">$3</span>)
 
-  <span class="ruby-keyword">if</span> <span class="ruby-identifier">already_existing_nicks</span>.<span class="ruby-identifier">count</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>
-    <span class="ruby-identifier">new_nick</span> = <span class="ruby-identifier">already_existing_nicks</span>.<span class="ruby-identifier">first</span>
-  <span class="ruby-keyword">else</span>
-    <span class="ruby-identifier">new_nick</span>.<span class="ruby-identifier">name</span> = <span class="ruby-node">$3</span>
-    <span class="ruby-identifier">new_nick</span>.<span class="ruby-identifier">username</span> = <span class="ruby-node">$4</span>
-    <span class="ruby-identifier">new_nick</span>.<span class="ruby-identifier">hostname</span> = <span class="ruby-node">$5</span>
-  
-    <span class="ruby-identifier">new_nick</span>.<span class="ruby-identifier">save</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">nick</span>
+      <span class="ruby-identifier">message</span> = <span class="ruby-constant">Message</span>.<span class="ruby-identifier">new</span>
+      <span class="ruby-identifier">message</span>.<span class="ruby-identifier">nick</span> = <span class="ruby-identifier">nick</span>
+      <span class="ruby-identifier">message</span>.<span class="ruby-identifier">message</span> = <span class="ruby-node">$4</span>
+      <span class="ruby-identifier">message</span>.<span class="ruby-identifier">said_at</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">utc</span>(<span class="ruby-ivar">@year</span>, <span class="ruby-ivar">@month</span>, <span class="ruby-ivar">@day</span>, <span class="ruby-node">$1</span>, <span class="ruby-node">$2</span>)
+      <span class="ruby-identifier">message</span>.<span class="ruby-identifier">action</span> = <span class="ruby-constant">Action</span><span class="ruby-operator">::</span><span class="ruby-constant">EMOTE</span>
+
+      <span class="ruby-identifier">message</span>.<span class="ruby-identifier">save</span>
+    
+      <span class="ruby-keyword">return</span> <span class="ruby-keyword">true</span>
+    <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">end</span>
-  
-  <span class="ruby-keyword">if</span> <span class="ruby-identifier">process_join</span>(<span class="ruby-identifier">line</span>, <span class="ruby-identifier">new_nick</span>.<span class="ruby-identifier">name</span>, <span class="ruby-identifier">hour</span>, <span class="ruby-identifier">minute</span>)
-    <span class="ruby-keyword">return</span>
-  <span class="ruby-keyword">end</span>
-  
-  <span class="ruby-keyword">if</span> <span class="ruby-identifier">process_quit</span>(<span class="ruby-identifier">quit</span>, <span class="ruby-identifier">new_nick</span>.<span class="ruby-identifier">name</span>, <span class="ruby-identifier">hour</span>, <span class="ruby-identifier">minute</span>)
-    <span class="ruby-keyword">return</span>
-  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-keyword">return</span> <span class="ruby-keyword">false</span>
 <span class="ruby-keyword">end</span></pre>
-          </div><!-- processSystemMessage-source -->
+          </div><!-- process_emote-source -->
           
         </div>
 
         
 
         
-      </div><!-- processSystemMessage-method -->
+      </div><!-- process_emote-method -->
 
     
       <div id="method-i-process_join" class="method-detail ">
@@ -290,7 +403,7 @@ otherwise.</p>
 
           
           <div class="method-source-code" id="process_join-source">
-            <pre><span class="ruby-comment"># File app/models/log_file_processor.rb, line 93</span>
+            <pre><span class="ruby-comment"># File app/models/log_file_processor.rb, line 140</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">process_join</span>(<span class="ruby-identifier">line</span>, <span class="ruby-identifier">nick</span>, <span class="ruby-identifier">hour</span>, <span class="ruby-identifier">minute</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">line</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">/^\d\d:\d\d -!- .* has joined /</span>)
     <span class="ruby-identifier">join_message</span> = <span class="ruby-constant">Message</span>.<span class="ruby-identifier">new</span>
@@ -333,7 +446,7 @@ otherwise.</p>
 
           
           <div class="method-source-code" id="process_quit-source">
-            <pre><span class="ruby-comment"># File app/models/log_file_processor.rb, line 75</span>
+            <pre><span class="ruby-comment"># File app/models/log_file_processor.rb, line 122</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">process_quit</span>(<span class="ruby-identifier">line</span>, <span class="ruby-identifier">nick</span>, <span class="ruby-identifier">hour</span>, <span class="ruby-identifier">minute</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">line</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">/^\d\d:\d\d -!- .* has quit \[/</span>)
     <span class="ruby-identifier">quit_message</span> = <span class="ruby-constant">Message</span>.<span class="ruby-identifier">new</span>
@@ -355,6 +468,52 @@ otherwise.</p>
 
         
       </div><!-- process_quit-method -->
+
+    
+      <div id="method-i-process_system_message" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">process_system_message</span><span
+            class="method-args">(line)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="process_system_message-source">
+            <pre><span class="ruby-comment"># File app/models/log_file_processor.rb, line 65</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">process_system_message</span>(<span class="ruby-identifier">line</span>)
+  <span class="ruby-identifier">user_match</span> = <span class="ruby-identifier">line</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">/^(\d\d):(\d\d) -!- (.*?) \[(.*?)@(.*?)\]/</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">user_match</span>
+    <span class="ruby-keyword">return</span>
+  <span class="ruby-keyword">end</span>
+  
+  <span class="ruby-identifier">nick</span> = <span class="ruby-identifier">get_nick_with_name_and_hostname</span>(<span class="ruby-node">$3</span>, <span class="ruby-node">$4</span>, <span class="ruby-node">$5</span>)
+  
+  <span class="ruby-identifier">hour</span> = <span class="ruby-node">$1</span>
+  <span class="ruby-identifier">minute</span> = <span class="ruby-node">$2</span>
+  
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">process_join</span>(<span class="ruby-identifier">line</span>, <span class="ruby-identifier">nick</span>.<span class="ruby-identifier">name</span>, <span class="ruby-identifier">hour</span>, <span class="ruby-identifier">minute</span>)
+    <span class="ruby-keyword">return</span>
+  <span class="ruby-keyword">end</span>
+  
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">process_quit</span>(<span class="ruby-identifier">line</span>, <span class="ruby-identifier">nick</span>.<span class="ruby-identifier">name</span>, <span class="ruby-identifier">hour</span>, <span class="ruby-identifier">minute</span>)
+    <span class="ruby-keyword">return</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- process_system_message-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- process_system_message-method -->
 
     
     </section><!-- public-instance-method-details -->
