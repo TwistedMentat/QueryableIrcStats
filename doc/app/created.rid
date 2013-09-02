@@ -1,0 +1,14 @@
+Mon, 02 Sep 2013 21:29:41 +1200
+doc/README_FOR_APP	Thu, 08 Aug 2013 21:06:02 +1200
+app/controllers/application_controller.rb	Thu, 08 Aug 2013 21:06:02 +1200
+app/controllers/log_files_controller.rb	Thu, 22 Aug 2013 21:09:29 +1200
+app/controllers/messages_controller.rb	Thu, 08 Aug 2013 21:06:02 +1200
+app/controllers/nicks_controller.rb	Tue, 27 Aug 2013 22:17:23 +1200
+app/helpers/application_helper.rb	Thu, 08 Aug 2013 21:06:02 +1200
+app/helpers/log_files_helper.rb	Wed, 21 Aug 2013 22:32:49 +1200
+app/helpers/messages_helper.rb	Wed, 21 Aug 2013 22:28:04 +1200
+app/helpers/nicks_helper.rb	Tue, 27 Aug 2013 22:17:23 +1200
+app/models/action.rb	Thu, 29 Aug 2013 21:55:17 +1200
+app/models/log_file_processor.rb	Mon, 02 Sep 2013 21:29:37 +1200
+app/models/message.rb	Thu, 29 Aug 2013 21:40:51 +1200
+app/models/nick.rb	Tue, 27 Aug 2013 22:17:23 +1200

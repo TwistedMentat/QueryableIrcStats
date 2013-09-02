@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+
+<title>class LogFileProcessor - Rails Application Documentation</title>
+
+<link type="text/css" media="screen" href="./rdoc.css" rel="stylesheet">
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "./";
+</script>
+
+<script type="text/javascript" charset="utf-8" src="./js/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/navigation.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/search_index.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/search.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/searcher.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/darkfish.js"></script>
+
+
+<body id="top" class="class">
+<nav id="metadata">
+  <nav id="home-section" class="section">
+  <h3 class="section-header">
+    <a href="./index.html">Home</a>
+    <a href="./table_of_contents.html#classes">Classes</a>
+    <a href="./table_of_contents.html#methods">Methods</a>
+  </h3>
+</nav>
+
+
+  <nav id="search-section" class="section project-section" class="initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <h3 class="section-header">
+      <input type="text" name="search" placeholder="Search" id="search-field"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </h3>
+  </form>
+
+  <ul id="search-results" class="initially-hidden"></ul>
+</nav>
+
+
+  <div id="file-metadata">
+    <nav id="file-list-section" class="section">
+  <h3 class="section-header">Defined In</h3>
+  <ul>
+    <li>app/models/log_file_processor.rb
+  </ul>
+</nav>
+
+    
+  </div>
+
+  <div id="class-metadata">
+    
+    <nav id="parent-class-section" class="section">
+  <h3 class="section-header">Parent</h3>
+  
+  <p class="link">Object
+  
+</nav>
+
+    
+    <!-- Method Quickref -->
+<nav id="method-list-section" class="section">
+  <h3 class="section-header">Methods</h3>
+
+  <ul class="link-list">
+    
+    <li><a href="#method-i-processLogFile">#processLogFile</a>
+    
+    <li><a href="#method-i-processSystemMessage">#processSystemMessage</a>
+    
+    <li><a href="#method-i-process_join">#process_join</a>
+    
+    <li><a href="#method-i-process_quit">#process_quit</a>
+    
+  </ul>
+</nav>
+
+  </div>
+
+  <div id="project-metadata">
+    <nav id="fileindex-section" class="section project-section">
+  <h3 class="section-header">Pages</h3>
+
+  <ul>
+  
+    <li class="file"><a href="./doc/README_FOR_APP.html">README_FOR_APP</a>
+  
+  </ul>
+</nav>
+
+    <nav id="classindex-section" class="section project-section">
+  <h3 class="section-header">Class and Module Index</h3>
+
+  <ul class="link-list">
+  
+    <li><a href="./Action.html">Action</a>
+  
+    <li><a href="./ApplicationController.html">ApplicationController</a>
+  
+    <li><a href="./ApplicationHelper.html">ApplicationHelper</a>
+  
+    <li><a href="./LogFileProcessor.html">LogFileProcessor</a>
+  
+    <li><a href="./LogFilesController.html">LogFilesController</a>
+  
+    <li><a href="./LogFilesHelper.html">LogFilesHelper</a>
+  
+    <li><a href="./Message.html">Message</a>
+  
+    <li><a href="./MessagesController.html">MessagesController</a>
+  
+    <li><a href="./MessagesHelper.html">MessagesHelper</a>
+  
+    <li><a href="./Nick.html">Nick</a>
+  
+    <li><a href="./NicksController.html">NicksController</a>
+  
+    <li><a href="./NicksHelper.html">NicksHelper</a>
+  
+  </ul>
+</nav>
+
+  </div>
+</nav>
+
+<div id="documentation">
+  <h1 class="class">class LogFileProcessor</h1>
+
+  <div id="description" class="description">
+    
+  </div><!-- description -->
+
+  
+  
+  
+  <section id="5Buntitled-5D" class="documentation-section">
+    
+
+    
+
+    
+
+    
+
+    <!-- Methods -->
+    
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section section">
+      <h3 class="section-header">Public Instance Methods</h3>
+
+    
+      <div id="method-i-processLogFile" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">processLogFile</span><span
+            class="method-args">(filenameOfLogFile)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="processLogFile-source">
+            <pre><span class="ruby-comment"># File app/models/log_file_processor.rb, line 6</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">processLogFile</span>(<span class="ruby-identifier">filenameOfLogFile</span>)
+
+  <span class="ruby-constant">IO</span>.<span class="ruby-identifier">foreach</span>(<span class="ruby-identifier">filenameOfLogFile</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">line</span><span class="ruby-operator">|</span>
+  
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">line</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">/^$/</span>)
+      <span class="ruby-keyword">next</span>
+    <span class="ruby-keyword">end</span>
+  
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">line</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">/^---/</span>) <span class="ruby-keyword">then</span>
+      <span class="ruby-identifier">line</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">/(\w\w\w) (\d\d)(?: \d\d:\d\d:\d\d)? (\d\d\d\d)/</span>)
+      <span class="ruby-ivar">@day</span> = <span class="ruby-node">$2</span>
+      <span class="ruby-ivar">@month</span> = <span class="ruby-node">$1</span>
+      <span class="ruby-ivar">@year</span> = <span class="ruby-node">$3</span>
+      <span class="ruby-keyword">next</span>
+    <span class="ruby-keyword">end</span>
+    
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">line</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">/^\d\d:\d\d -!-/</span>) <span class="ruby-keyword">then</span>
+      <span class="ruby-identifier">processSystemMessage</span>(<span class="ruby-identifier">line</span>)
+      <span class="ruby-keyword">next</span>
+    <span class="ruby-keyword">end</span>
+  
+    <span class="ruby-identifier">line</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">/^(\d\d):(\d\d) &lt;.(.*)&gt; (.*)/</span>)
+    <span class="ruby-identifier">newMessage</span> = <span class="ruby-constant">Message</span>.<span class="ruby-identifier">new</span>
+
+    <span class="ruby-identifier">newMessage</span>.<span class="ruby-identifier">nick</span> = <span class="ruby-node">$3</span>
+    <span class="ruby-identifier">newMessage</span>.<span class="ruby-identifier">message</span> = <span class="ruby-node">$4</span>
+    <span class="ruby-identifier">newMessage</span>.<span class="ruby-identifier">said_at</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">utc</span>(<span class="ruby-ivar">@year</span>, <span class="ruby-ivar">@month</span>, <span class="ruby-ivar">@day</span>, <span class="ruby-node">$1</span>, <span class="ruby-node">$2</span>)
+    <span class="ruby-identifier">newMessage</span>.<span class="ruby-identifier">action</span> = <span class="ruby-constant">Action</span><span class="ruby-operator">::</span><span class="ruby-constant">SPEECH</span>
+  
+    <span class="ruby-identifier">newMessage</span>.<span class="ruby-identifier">save</span>
+  
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- processLogFile-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- processLogFile-method -->
+
+    
+      <div id="method-i-processSystemMessage" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">processSystemMessage</span><span
+            class="method-args">(line)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+
+          
+          <div class="method-source-code" id="processSystemMessage-source">
+            <pre><span class="ruby-comment"># File app/models/log_file_processor.rb, line 40</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">processSystemMessage</span>(<span class="ruby-identifier">line</span>)
+  <span class="ruby-identifier">user_match</span> = <span class="ruby-identifier">line</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">/^(\d\d):(\d\d) -!- (.*?) \[(.*?)@(.*?)\]/</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">user_match</span>
+    <span class="ruby-keyword">return</span>
+  <span class="ruby-keyword">end</span>
+  
+  <span class="ruby-identifier">hour</span> = <span class="ruby-node">$1</span>
+  <span class="ruby-identifier">minute</span> = <span class="ruby-node">$2</span>
+  
+  <span class="ruby-identifier">new_nick</span> = <span class="ruby-constant">Nick</span>.<span class="ruby-identifier">new</span>
+  <span class="ruby-identifier">already_existing_nicks</span> = <span class="ruby-constant">Nick</span>.<span class="ruby-identifier">where</span>(<span class="ruby-string">&quot;name = ? AND hostname = ?&quot;</span>, <span class="ruby-node">$3</span>, <span class="ruby-node">$5</span>)
+
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">already_existing_nicks</span>.<span class="ruby-identifier">count</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>
+    <span class="ruby-identifier">new_nick</span> = <span class="ruby-identifier">already_existing_nicks</span>.<span class="ruby-identifier">first</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">new_nick</span>.<span class="ruby-identifier">name</span> = <span class="ruby-node">$3</span>
+    <span class="ruby-identifier">new_nick</span>.<span class="ruby-identifier">username</span> = <span class="ruby-node">$4</span>
+    <span class="ruby-identifier">new_nick</span>.<span class="ruby-identifier">hostname</span> = <span class="ruby-node">$5</span>
+  
+    <span class="ruby-identifier">new_nick</span>.<span class="ruby-identifier">save</span>
+  <span class="ruby-keyword">end</span>
+  
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">process_join</span>(<span class="ruby-identifier">line</span>, <span class="ruby-identifier">new_nick</span>.<span class="ruby-identifier">name</span>, <span class="ruby-identifier">hour</span>, <span class="ruby-identifier">minute</span>)
+    <span class="ruby-keyword">return</span>
+  <span class="ruby-keyword">end</span>
+  
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">process_quit</span>(<span class="ruby-identifier">quit</span>, <span class="ruby-identifier">new_nick</span>.<span class="ruby-identifier">name</span>, <span class="ruby-identifier">hour</span>, <span class="ruby-identifier">minute</span>)
+    <span class="ruby-keyword">return</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- processSystemMessage-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- processSystemMessage-method -->
+
+    
+      <div id="method-i-process_join" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">process_join</span><span
+            class="method-args">(line, nick, hour, minute)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Process and create a join message entry</p>
+
+<p>Returns: <code>true</code> if the line is a join message <code>false</code>
+otherwise.</p>
+          
+
+          
+          <div class="method-source-code" id="process_join-source">
+            <pre><span class="ruby-comment"># File app/models/log_file_processor.rb, line 93</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">process_join</span>(<span class="ruby-identifier">line</span>, <span class="ruby-identifier">nick</span>, <span class="ruby-identifier">hour</span>, <span class="ruby-identifier">minute</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">line</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">/^\d\d:\d\d -!- .* has joined /</span>)
+    <span class="ruby-identifier">join_message</span> = <span class="ruby-constant">Message</span>.<span class="ruby-identifier">new</span>
+    <span class="ruby-identifier">join_message</span>.<span class="ruby-identifier">nick</span> = <span class="ruby-identifier">nick</span>
+    <span class="ruby-identifier">join_message</span>.<span class="ruby-identifier">said_at</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">utc</span>(<span class="ruby-ivar">@year</span>, <span class="ruby-ivar">@month</span>, <span class="ruby-ivar">@day</span>, <span class="ruby-identifier">hour</span>, <span class="ruby-identifier">minute</span>)
+    <span class="ruby-identifier">join_message</span>.<span class="ruby-identifier">action</span> = <span class="ruby-constant">Action</span><span class="ruby-operator">::</span><span class="ruby-constant">JOIN</span>
+    <span class="ruby-identifier">join_message</span>.<span class="ruby-identifier">save</span>
+    
+    <span class="ruby-keyword">return</span> <span class="ruby-keyword">true</span>
+  <span class="ruby-keyword">end</span>
+  
+  <span class="ruby-keyword">return</span> <span class="ruby-keyword">false</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- process_join-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- process_join-method -->
+
+    
+      <div id="method-i-process_quit" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">process_quit</span><span
+            class="method-args">(line, nick, hour, minute)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Processes and creates a user quit message</p>
+
+<p>Returns: <code>true</code> if the line is a quit message <code>false</code>
+otherwise.</p>
+          
+
+          
+          <div class="method-source-code" id="process_quit-source">
+            <pre><span class="ruby-comment"># File app/models/log_file_processor.rb, line 75</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">process_quit</span>(<span class="ruby-identifier">line</span>, <span class="ruby-identifier">nick</span>, <span class="ruby-identifier">hour</span>, <span class="ruby-identifier">minute</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">line</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">/^\d\d:\d\d -!- .* has quit \[/</span>)
+    <span class="ruby-identifier">quit_message</span> = <span class="ruby-constant">Message</span>.<span class="ruby-identifier">new</span>
+    <span class="ruby-identifier">quit_message</span>.<span class="ruby-identifier">nick</span> = <span class="ruby-identifier">nick</span>
+    <span class="ruby-identifier">quit_message</span>.<span class="ruby-identifier">said_at</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">utc</span>(<span class="ruby-ivar">@year</span>, <span class="ruby-ivar">@month</span>, <span class="ruby-ivar">@day</span>, <span class="ruby-identifier">hour</span>, <span class="ruby-identifier">minute</span>)
+    <span class="ruby-identifier">quit_message</span>.<span class="ruby-identifier">action</span> = <span class="ruby-constant">Action</span><span class="ruby-operator">::</span><span class="ruby-constant">QUIT</span>
+    <span class="ruby-identifier">quit_message</span>.<span class="ruby-identifier">save</span>
+    
+    <span class="ruby-keyword">return</span> <span class="ruby-keyword">true</span>
+  <span class="ruby-keyword">end</span>
+  
+  <span class="ruby-keyword">return</span> <span class="ruby-keyword">false</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- process_quit-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- process_quit-method -->
+
+    
+    </section><!-- public-instance-method-details -->
+  
+  </section><!-- 5Buntitled-5D -->
+
+</div><!-- documentation -->
+
+
+<footer id="validator-badges">
+  <p><a href="http://validator.w3.org/check/referer">[Validate]</a>
+  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 3.12.2.
+  <p>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish Rdoc Generator</a> 3.
+</footer>
+
