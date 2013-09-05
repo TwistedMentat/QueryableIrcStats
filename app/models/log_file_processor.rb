@@ -1,11 +1,15 @@
+require 'active_support/core_ext'
+
 class LogFileProcessor
   @day = 1
   @month = "jan"
   @year = 2013
 
-  def processLogFile(filenameOfLogFile)
+  ##
+  # Process the provided log file and add the values into the database
+  def process_log_file(filename_of_log_file)
 
-    IO.foreach(filenameOfLogFile) do |line|
+    IO.foreach(filename_of_log_file) do |line|
     
       if line.match(/^$/)
         next
@@ -30,18 +34,25 @@ class LogFileProcessor
       end
     
       line.match(/^(\d\d):(\d\d) <.(.*?)> (.*)/)
-      newMessage = Message.new
 
-      newMessage.nick = $3
-      newMessage.message = $4
-      newMessage.said_at = Time.utc(@year, @month, @day, $1, $2)
-      newMessage.action = Action::SPEECH
+      new_message = Message.new
+
+      new_message.nick = $3
+      new_message.message = $4
+      new_message.said_at = Time.utc(@year, @month, @day, $1, $2)
+      new_message.action = Action::SPEECH
     
-      newMessage.save
+      if(is_message_already_logged(new_message.nick, new_message.message, new_message.said_at))
+        next
+      end
+
+      new_message.save
     
     end
   end
   
+  ##
+  # Process and create message entries for emote actions.
   def process_emote(line)
     if line.match(/^(\d\d):(\d\d)  \* ([\w\d]*?) (.*)/)
       nick = get_nick_with_just_name($3)
@@ -62,6 +73,10 @@ class LogFileProcessor
     return false
   end
   
+  ##
+  # Process and creates message records of system events.
+  #
+  # This includes items such as joins, quits, kicks, bans, etc.
   def process_system_message(line)
     user_match = line.match(/^(\d\d):(\d\d) -!- (.*?) \[(.*?)@(.*?)\]/)
     if !user_match
@@ -81,17 +96,21 @@ class LogFileProcessor
       return
     end
   end
-  
+
+  ##
+  # Searches all known nicks for those with the given name
   def get_nick_with_just_name(name)
-    already_existing_nicks = Nick.where("name = ?", name)
+    already_existing_nicks = Nick.where(:name => name)
 
     Rails.logger.debug("#{Time.now}nickname search #{name}")
 
     return find_or_create_nick(already_existing_nicks, name)      
   end
   
+  ##
+  # Searches all know name and hostname combinations to find the matching nick
   def get_nick_with_name_and_hostname(name, username, hostname)
-    already_existing_nicks = Nick.where("name = ? AND hostname = ?", name, hostname)
+    already_existing_nicks = Nick.where(:name =>  name, :hostname => hostname)
 
     new_nick = find_or_create_nick(already_existing_nicks, name)
     new_nick.username = username
@@ -101,6 +120,10 @@ class LogFileProcessor
     return new_nick
   end
   
+  ##
+  # Finds the the first nick in the provided list or creates a new one if no match is found.
+  #
+  # Returns: A nick object with the name property of the provided name
   def find_or_create_nick(already_existing_nicks, name)
     new_nick = Nick.new
 
@@ -134,7 +157,7 @@ class LogFileProcessor
   end
 
   ##
-  # Process and create a join message entry
+  # Process and create a user join message entry
   # 
   # Returns: +true+ if the line is a join message +false+ otherwise.
   def process_join(line, nick, hour, minute)
@@ -149,6 +172,17 @@ class LogFileProcessor
     end
     
     return false
+  end
+  
+  ##
+  # Check that the message has not already been saved to the database.
+  #
+  # Where someone rapidly repeats the same thing this will result in that being flattened into one item. 
+  # I cannot think of a nicer way to avoid duplicates from multiple logfiles 
+  def is_message_already_logged(name, message_body, said_at)
+    found_messages = Message.where(:nick => name, :message => message_body, :said_at => said_at.change(:sec => 0)..said_at.change(:sec => 59))
+    
+    return found_messages.count > 0
   end
   
 end

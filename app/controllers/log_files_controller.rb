@@ -79,18 +79,17 @@ class LogFilesController < ApplicationController
   
   # POST /log_files/upload
   # Take the given file and save it to disc.
-  # Next step is then to process it and save each line to a database
   def upload
     uploaded_io = params[:log_file]
 
-    savedFileName = Rails.root.join('public', 'uploads', "#{Time.new.strftime("%Y-%m-%d-%H%M%S")}_#{uploaded_io.original_filename}")
+    saved_filename = Rails.root.join('public', 'uploads', "#{Time.new.strftime("%Y-%m-%d-%H%M%S")}_#{uploaded_io.original_filename}")
 
-    File.open(savedFileName, 'w') do |file|
+    File.open(saved_filename, 'w') do |file|
       file.write(uploaded_io.read)
     end
     
     processor = LogFileProcessor.new
     
-    processor.processLogFile(savedFileName)
+    processor.process_log_file(saved_filename)
   end
 end
