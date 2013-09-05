@@ -420,25 +420,24 @@
 
         <div class="method-description">
           
-          <p>POST /log_files/upload Take the given file and save it to disc. Next step
-is then to process it and save each line to a database</p>
+          <p>POST /log_files/upload Take the given file and save it to disc.</p>
           
 
           
           <div class="method-source-code" id="upload-source">
-            <pre><span class="ruby-comment"># File app/controllers/log_files_controller.rb, line 83</span>
+            <pre><span class="ruby-comment"># File app/controllers/log_files_controller.rb, line 82</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">upload</span>
   <span class="ruby-identifier">uploaded_io</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:log_file</span>]
 
-  <span class="ruby-identifier">savedFileName</span> = <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">root</span>.<span class="ruby-identifier">join</span>(<span class="ruby-string">&#39;public&#39;</span>, <span class="ruby-string">&#39;uploads&#39;</span>, <span class="ruby-node">&quot;#{Time.new.strftime(&quot;%Y-%m-%d-%H%M%S&quot;)}_#{uploaded_io.original_filename}&quot;</span>)
+  <span class="ruby-identifier">saved_filename</span> = <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">root</span>.<span class="ruby-identifier">join</span>(<span class="ruby-string">&#39;public&#39;</span>, <span class="ruby-string">&#39;uploads&#39;</span>, <span class="ruby-node">&quot;#{Time.new.strftime(&quot;%Y-%m-%d-%H%M%S&quot;)}_#{uploaded_io.original_filename}&quot;</span>)
 
-  <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">savedFileName</span>, <span class="ruby-string">&#39;w&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">file</span><span class="ruby-operator">|</span>
+  <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">saved_filename</span>, <span class="ruby-string">&#39;w&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">file</span><span class="ruby-operator">|</span>
     <span class="ruby-identifier">file</span>.<span class="ruby-identifier">write</span>(<span class="ruby-identifier">uploaded_io</span>.<span class="ruby-identifier">read</span>)
   <span class="ruby-keyword">end</span>
   
   <span class="ruby-identifier">processor</span> = <span class="ruby-constant">LogFileProcessor</span>.<span class="ruby-identifier">new</span>
   
-  <span class="ruby-identifier">processor</span>.<span class="ruby-identifier">processLogFile</span>(<span class="ruby-identifier">savedFileName</span>)
+  <span class="ruby-identifier">processor</span>.<span class="ruby-identifier">process_log_file</span>(<span class="ruby-identifier">saved_filename</span>)
 <span class="ruby-keyword">end</span></pre>
           </div><!-- upload-source -->
           

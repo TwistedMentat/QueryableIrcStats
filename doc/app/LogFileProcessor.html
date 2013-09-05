@@ -76,11 +76,13 @@
     
     <li><a href="#method-i-get_nick_with_name_and_hostname">#get_nick_with_name_and_hostname</a>
     
-    <li><a href="#method-i-processLogFile">#processLogFile</a>
+    <li><a href="#method-i-is_message_already_logged">#is_message_already_logged</a>
     
     <li><a href="#method-i-process_emote">#process_emote</a>
     
     <li><a href="#method-i-process_join">#process_join</a>
+    
+    <li><a href="#method-i-process_log_file">#process_log_file</a>
     
     <li><a href="#method-i-process_quit">#process_quit</a>
     
@@ -173,12 +175,15 @@
 
         <div class="method-description">
           
-          
+          <p>Finds the the first nick in the provided list or creates a new one if no
+match is found.</p>
+
+<p>Returns: A nick object with the name property of the provided name</p>
           
 
           
           <div class="method-source-code" id="find_or_create_nick-source">
-            <pre><span class="ruby-comment"># File app/models/log_file_processor.rb, line 104</span>
+            <pre><span class="ruby-comment"># File app/models/log_file_processor.rb, line 127</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">find_or_create_nick</span>(<span class="ruby-identifier">already_existing_nicks</span>, <span class="ruby-identifier">name</span>)
   <span class="ruby-identifier">new_nick</span> = <span class="ruby-constant">Nick</span>.<span class="ruby-identifier">new</span>
 
@@ -213,14 +218,14 @@
 
         <div class="method-description">
           
-          
+          <p>Searches all known nicks for those with the given name</p>
           
 
           
           <div class="method-source-code" id="get_nick_with_just_name-source">
-            <pre><span class="ruby-comment"># File app/models/log_file_processor.rb, line 85</span>
+            <pre><span class="ruby-comment"># File app/models/log_file_processor.rb, line 102</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">get_nick_with_just_name</span>(<span class="ruby-identifier">name</span>)
-  <span class="ruby-identifier">already_existing_nicks</span> = <span class="ruby-constant">Nick</span>.<span class="ruby-identifier">where</span>(<span class="ruby-string">&quot;name = ?&quot;</span>, <span class="ruby-identifier">name</span>)
+  <span class="ruby-identifier">already_existing_nicks</span> = <span class="ruby-constant">Nick</span>.<span class="ruby-identifier">where</span>(<span class="ruby-value">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">name</span>)
 
   <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">logger</span>.<span class="ruby-identifier">debug</span>(<span class="ruby-node">&quot;#{Time.now}nickname search #{name}&quot;</span>)
 
@@ -247,14 +252,14 @@
 
         <div class="method-description">
           
-          
+          <p>Searches all know name and hostname combinations to find the matching nick</p>
           
 
           
           <div class="method-source-code" id="get_nick_with_name_and_hostname-source">
-            <pre><span class="ruby-comment"># File app/models/log_file_processor.rb, line 93</span>
+            <pre><span class="ruby-comment"># File app/models/log_file_processor.rb, line 112</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">get_nick_with_name_and_hostname</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">username</span>, <span class="ruby-identifier">hostname</span>)
-  <span class="ruby-identifier">already_existing_nicks</span> = <span class="ruby-constant">Nick</span>.<span class="ruby-identifier">where</span>(<span class="ruby-string">&quot;name = ? AND hostname = ?&quot;</span>, <span class="ruby-identifier">name</span>, <span class="ruby-identifier">hostname</span>)
+  <span class="ruby-identifier">already_existing_nicks</span> = <span class="ruby-constant">Nick</span>.<span class="ruby-identifier">where</span>(<span class="ruby-value">:name</span> =<span class="ruby-operator">&gt;</span>  <span class="ruby-identifier">name</span>, <span class="ruby-value">:hostname</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">hostname</span>)
 
   <span class="ruby-identifier">new_nick</span> = <span class="ruby-identifier">find_or_create_nick</span>(<span class="ruby-identifier">already_existing_nicks</span>, <span class="ruby-identifier">name</span>)
   <span class="ruby-identifier">new_nick</span>.<span class="ruby-identifier">username</span> = <span class="ruby-identifier">username</span>
@@ -273,69 +278,40 @@
       </div><!-- get_nick_with_name_and_hostname-method -->
 
     
-      <div id="method-i-processLogFile" class="method-detail ">
+      <div id="method-i-is_message_already_logged" class="method-detail ">
         
         <div class="method-heading">
-          <span class="method-name">processLogFile</span><span
-            class="method-args">(filenameOfLogFile)</span>
+          <span class="method-name">is_message_already_logged</span><span
+            class="method-args">(name, message_body, said_at)</span>
           <span class="method-click-advice">click to toggle source</span>
         </div>
         
 
         <div class="method-description">
           
-          
+          <p>Check that the message has not already been saved to the database.</p>
+
+<p>Where someone rapidly repeats the same thing this will result in that being
+flattened into one item.  I cannot think of a nicer way to avoid duplicates
+from multiple logfiles</p>
           
 
           
-          <div class="method-source-code" id="processLogFile-source">
-            <pre><span class="ruby-comment"># File app/models/log_file_processor.rb, line 6</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">processLogFile</span>(<span class="ruby-identifier">filenameOfLogFile</span>)
-
-  <span class="ruby-constant">IO</span>.<span class="ruby-identifier">foreach</span>(<span class="ruby-identifier">filenameOfLogFile</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">line</span><span class="ruby-operator">|</span>
+          <div class="method-source-code" id="is_message_already_logged-source">
+            <pre><span class="ruby-comment"># File app/models/log_file_processor.rb, line 182</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">is_message_already_logged</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">message_body</span>, <span class="ruby-identifier">said_at</span>)
+  <span class="ruby-identifier">found_messages</span> = <span class="ruby-constant">Message</span>.<span class="ruby-identifier">where</span>(<span class="ruby-value">:nick</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">name</span>, <span class="ruby-value">:message</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">message_body</span>, <span class="ruby-value">:said_at</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">said_at</span>.<span class="ruby-identifier">change</span>(<span class="ruby-value">:sec</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>)<span class="ruby-operator">..</span><span class="ruby-identifier">said_at</span>.<span class="ruby-identifier">change</span>(<span class="ruby-value">:sec</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">59</span>))
   
-    <span class="ruby-keyword">if</span> <span class="ruby-identifier">line</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">/^$/</span>)
-      <span class="ruby-keyword">next</span>
-    <span class="ruby-keyword">end</span>
-  
-    <span class="ruby-keyword">if</span> <span class="ruby-identifier">line</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">/^---/</span>) <span class="ruby-keyword">then</span>
-      <span class="ruby-identifier">line</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">/(\w\w\w) (\d\d)(?: \d\d:\d\d:\d\d)? (\d\d\d\d)/</span>)
-      <span class="ruby-ivar">@day</span> = <span class="ruby-node">$2</span>
-      <span class="ruby-ivar">@month</span> = <span class="ruby-node">$1</span>
-      <span class="ruby-ivar">@year</span> = <span class="ruby-node">$3</span>
-      <span class="ruby-keyword">next</span>
-    <span class="ruby-keyword">end</span>
-    
-    <span class="ruby-keyword">if</span> <span class="ruby-identifier">line</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">/^\d\d:\d\d -!-/</span>) <span class="ruby-keyword">then</span>
-      <span class="ruby-identifier">process_system_message</span>(<span class="ruby-identifier">line</span>)
-      <span class="ruby-keyword">next</span>
-    <span class="ruby-keyword">end</span>
-    
-    <span class="ruby-keyword">if</span> <span class="ruby-identifier">line</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">/^\d\d:\d\d  \*/</span>)
-      <span class="ruby-identifier">process_emote</span>(<span class="ruby-identifier">line</span>)
-      <span class="ruby-keyword">next</span>
-    <span class="ruby-keyword">end</span>
-  
-    <span class="ruby-identifier">line</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">/^(\d\d):(\d\d) &lt;.(.*?)&gt; (.*)/</span>)
-    <span class="ruby-identifier">newMessage</span> = <span class="ruby-constant">Message</span>.<span class="ruby-identifier">new</span>
-
-    <span class="ruby-identifier">newMessage</span>.<span class="ruby-identifier">nick</span> = <span class="ruby-node">$3</span>
-    <span class="ruby-identifier">newMessage</span>.<span class="ruby-identifier">message</span> = <span class="ruby-node">$4</span>
-    <span class="ruby-identifier">newMessage</span>.<span class="ruby-identifier">said_at</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">utc</span>(<span class="ruby-ivar">@year</span>, <span class="ruby-ivar">@month</span>, <span class="ruby-ivar">@day</span>, <span class="ruby-node">$1</span>, <span class="ruby-node">$2</span>)
-    <span class="ruby-identifier">newMessage</span>.<span class="ruby-identifier">action</span> = <span class="ruby-constant">Action</span><span class="ruby-operator">::</span><span class="ruby-constant">SPEECH</span>
-  
-    <span class="ruby-identifier">newMessage</span>.<span class="ruby-identifier">save</span>
-  
-  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">return</span> <span class="ruby-identifier">found_messages</span>.<span class="ruby-identifier">count</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>
 <span class="ruby-keyword">end</span></pre>
-          </div><!-- processLogFile-source -->
+          </div><!-- is_message_already_logged-source -->
           
         </div>
 
         
 
         
-      </div><!-- processLogFile-method -->
+      </div><!-- is_message_already_logged-method -->
 
     
       <div id="method-i-process_emote" class="method-detail ">
@@ -349,19 +325,19 @@
 
         <div class="method-description">
           
-          
+          <p>Process and create message entries for emote actions.</p>
           
 
           
           <div class="method-source-code" id="process_emote-source">
-            <pre><span class="ruby-comment"># File app/models/log_file_processor.rb, line 45</span>
+            <pre><span class="ruby-comment"># File app/models/log_file_processor.rb, line 56</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">process_emote</span>(<span class="ruby-identifier">line</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">line</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">/^(\d\d):(\d\d)  \* ([\w\d]*?) (.*)/</span>)
     <span class="ruby-identifier">nick</span> = <span class="ruby-identifier">get_nick_with_just_name</span>(<span class="ruby-node">$3</span>)
 
     <span class="ruby-keyword">if</span> <span class="ruby-identifier">nick</span>
       <span class="ruby-identifier">message</span> = <span class="ruby-constant">Message</span>.<span class="ruby-identifier">new</span>
-      <span class="ruby-identifier">message</span>.<span class="ruby-identifier">nick</span> = <span class="ruby-identifier">nick</span>
+      <span class="ruby-identifier">message</span>.<span class="ruby-identifier">nick</span> = <span class="ruby-identifier">nick</span>.<span class="ruby-identifier">name</span>
       <span class="ruby-identifier">message</span>.<span class="ruby-identifier">message</span> = <span class="ruby-node">$4</span>
       <span class="ruby-identifier">message</span>.<span class="ruby-identifier">said_at</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">utc</span>(<span class="ruby-ivar">@year</span>, <span class="ruby-ivar">@month</span>, <span class="ruby-ivar">@day</span>, <span class="ruby-node">$1</span>, <span class="ruby-node">$2</span>)
       <span class="ruby-identifier">message</span>.<span class="ruby-identifier">action</span> = <span class="ruby-constant">Action</span><span class="ruby-operator">::</span><span class="ruby-constant">EMOTE</span>
@@ -395,7 +371,7 @@
 
         <div class="method-description">
           
-          <p>Process and create a join message entry</p>
+          <p>Process and create a user join message entry</p>
 
 <p>Returns: <code>true</code> if the line is a join message <code>false</code>
 otherwise.</p>
@@ -403,7 +379,7 @@ otherwise.</p>
 
           
           <div class="method-source-code" id="process_join-source">
-            <pre><span class="ruby-comment"># File app/models/log_file_processor.rb, line 140</span>
+            <pre><span class="ruby-comment"># File app/models/log_file_processor.rb, line 163</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">process_join</span>(<span class="ruby-identifier">line</span>, <span class="ruby-identifier">nick</span>, <span class="ruby-identifier">hour</span>, <span class="ruby-identifier">minute</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">line</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">/^\d\d:\d\d -!- .* has joined /</span>)
     <span class="ruby-identifier">join_message</span> = <span class="ruby-constant">Message</span>.<span class="ruby-identifier">new</span>
@@ -427,6 +403,76 @@ otherwise.</p>
       </div><!-- process_join-method -->
 
     
+      <div id="method-i-process_log_file" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">process_log_file</span><span
+            class="method-args">(filename_of_log_file)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Process the provided log file and add the values into the database</p>
+          
+
+          
+          <div class="method-source-code" id="process_log_file-source">
+            <pre><span class="ruby-comment"># File app/models/log_file_processor.rb, line 10</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">process_log_file</span>(<span class="ruby-identifier">filename_of_log_file</span>)
+
+  <span class="ruby-constant">IO</span>.<span class="ruby-identifier">foreach</span>(<span class="ruby-identifier">filename_of_log_file</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">line</span><span class="ruby-operator">|</span>
+  
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">line</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">/^$/</span>)
+      <span class="ruby-keyword">next</span>
+    <span class="ruby-keyword">end</span>
+  
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">line</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">/^---/</span>) <span class="ruby-keyword">then</span>
+      <span class="ruby-identifier">line</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">/(\w\w\w) (\d\d)(?: \d\d:\d\d:\d\d)? (\d\d\d\d)/</span>)
+      <span class="ruby-ivar">@day</span> = <span class="ruby-node">$2</span>
+      <span class="ruby-ivar">@month</span> = <span class="ruby-node">$1</span>
+      <span class="ruby-ivar">@year</span> = <span class="ruby-node">$3</span>
+      <span class="ruby-keyword">next</span>
+    <span class="ruby-keyword">end</span>
+    
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">line</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">/^\d\d:\d\d -!-/</span>) <span class="ruby-keyword">then</span>
+      <span class="ruby-identifier">process_system_message</span>(<span class="ruby-identifier">line</span>)
+      <span class="ruby-keyword">next</span>
+    <span class="ruby-keyword">end</span>
+    
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">line</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">/^\d\d:\d\d  \*/</span>)
+      <span class="ruby-identifier">process_emote</span>(<span class="ruby-identifier">line</span>)
+      <span class="ruby-keyword">next</span>
+    <span class="ruby-keyword">end</span>
+  
+    <span class="ruby-identifier">line</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">/^(\d\d):(\d\d) &lt;.(.*?)&gt; (.*)/</span>)
+
+    <span class="ruby-identifier">new_message</span> = <span class="ruby-constant">Message</span>.<span class="ruby-identifier">new</span>
+
+    <span class="ruby-identifier">new_message</span>.<span class="ruby-identifier">nick</span> = <span class="ruby-node">$3</span>
+    <span class="ruby-identifier">new_message</span>.<span class="ruby-identifier">message</span> = <span class="ruby-node">$4</span>
+    <span class="ruby-identifier">new_message</span>.<span class="ruby-identifier">said_at</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">utc</span>(<span class="ruby-ivar">@year</span>, <span class="ruby-ivar">@month</span>, <span class="ruby-ivar">@day</span>, <span class="ruby-node">$1</span>, <span class="ruby-node">$2</span>)
+    <span class="ruby-identifier">new_message</span>.<span class="ruby-identifier">action</span> = <span class="ruby-constant">Action</span><span class="ruby-operator">::</span><span class="ruby-constant">SPEECH</span>
+  
+    <span class="ruby-keyword">if</span>(<span class="ruby-identifier">is_message_already_logged</span>(<span class="ruby-identifier">new_message</span>.<span class="ruby-identifier">nick</span>, <span class="ruby-identifier">new_message</span>.<span class="ruby-identifier">message</span>, <span class="ruby-identifier">new_message</span>.<span class="ruby-identifier">said_at</span>))
+      <span class="ruby-keyword">next</span>
+    <span class="ruby-keyword">end</span>
+
+    <span class="ruby-identifier">new_message</span>.<span class="ruby-identifier">save</span>
+  
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- process_log_file-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- process_log_file-method -->
+
+    
       <div id="method-i-process_quit" class="method-detail ">
         
         <div class="method-heading">
@@ -446,7 +492,7 @@ otherwise.</p>
 
           
           <div class="method-source-code" id="process_quit-source">
-            <pre><span class="ruby-comment"># File app/models/log_file_processor.rb, line 122</span>
+            <pre><span class="ruby-comment"># File app/models/log_file_processor.rb, line 145</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">process_quit</span>(<span class="ruby-identifier">line</span>, <span class="ruby-identifier">nick</span>, <span class="ruby-identifier">hour</span>, <span class="ruby-identifier">minute</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">line</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">/^\d\d:\d\d -!- .* has quit \[/</span>)
     <span class="ruby-identifier">quit_message</span> = <span class="ruby-constant">Message</span>.<span class="ruby-identifier">new</span>
@@ -481,12 +527,14 @@ otherwise.</p>
 
         <div class="method-description">
           
-          
+          <p>Process and creates message records of system events.</p>
+
+<p>This includes items such as joins, quits, kicks, bans, etc.</p>
           
 
           
           <div class="method-source-code" id="process_system_message-source">
-            <pre><span class="ruby-comment"># File app/models/log_file_processor.rb, line 65</span>
+            <pre><span class="ruby-comment"># File app/models/log_file_processor.rb, line 80</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">process_system_message</span>(<span class="ruby-identifier">line</span>)
   <span class="ruby-identifier">user_match</span> = <span class="ruby-identifier">line</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">/^(\d\d):(\d\d) -!- (.*?) \[(.*?)@(.*?)\]/</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">user_match</span>
