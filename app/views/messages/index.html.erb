@@ -15,7 +15,7 @@
   <tr>
     <td><%= message.nick %></td>
     <td><%= auto_link message.message, mode=:all, link_attr=nil, skip_tags=nil %></td>
-    <td><%= message.said_at %></td>
+    <td class="time-string"><%= message.said_at.to_formatted_s(:long_ordinal) %></td>
     <td><%= message.action %></td>
     <td><%= link_to 'Show', message %></td>
     <td><%= link_to 'Edit', edit_message_path(message) %></td>
