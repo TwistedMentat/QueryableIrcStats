@@ -1,13 +1,10 @@
 QueryableIrcStats::Application.routes.draw do
   resources :nicks
-
-
   resources :messages
-  resources :log_files do
-    collection do
-      post 'upload'
-    end
-  end
+
+  match 'log_file' => 'log_file#view'
+  match 'log_file/new' => 'log_file#new' 
+  match 'log_file/save' => 'log_file#save'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
