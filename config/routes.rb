@@ -1,4 +1,7 @@
 QueryableIrcStats::Application.routes.draw do
+  resources :hostnames
+
+
   resources :nicks
   resources :messages
 

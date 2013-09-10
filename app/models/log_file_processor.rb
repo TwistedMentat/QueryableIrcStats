@@ -101,30 +101,6 @@ class LogFileProcessor
   # Searches all known nicks for those with the given name
   def get_nick_with_just_name(name)
     already_existing_nicks = Nick.where(:name => name)
-
-    Rails.logger.debug("#{Time.now}nickname search #{name}")
-
-    return find_or_create_nick(already_existing_nicks, name)      
-  end
-  
-  ##
-  # Searches all know name and hostname combinations to find the matching nick
-  def get_nick_with_name_and_hostname(name, username, hostname)
-    already_existing_nicks = Nick.where(:name =>  name, :hostname => hostname)
-
-    new_nick = find_or_create_nick(already_existing_nicks, name)
-    new_nick.username = username
-    new_nick.hostname = hostname
-    new_nick.save
-    
-    return new_nick
-  end
-  
-  ##
-  # Finds the the first nick in the provided list or creates a new one if no match is found.
-  #
-  # Returns: A nick object with the name property of the provided name
-  def find_or_create_nick(already_existing_nicks, name)
     new_nick = Nick.new
 
     if already_existing_nicks.count > 0
@@ -132,6 +108,37 @@ class LogFileProcessor
     else
       new_nick.name = name
     
+      new_nick.save
+    end
+    
+    return new_nick
+  end
+  
+  ##
+  # Searches all know name and hostname combinations to find the matching nick
+  def get_nick_with_name_and_hostname(name, username, hostname)
+    already_existing_nicks = Nick.where(:name => name)
+    new_nick = Nick.new
+
+    if already_existing_nicks.count > 0
+      new_nick = already_existing_nicks.first
+    else
+      new_nick.name = name
+      new_nick.username = username
+      
+      existing_hostnames = Hostname.where(:domain_name => hostname)
+      new_hostname = Hostname.new
+
+      # Should only ever have 0 or 1 hostnames with the given domain_name
+      if existing_hostnames.count > 0
+        new_hostname = existing_hostnames.first
+      end
+
+      new_hostname.domain_name = hostname
+      if !new_nick.hostnames.include? new_hostname
+        new_nick.hostnames = new_nick.hostnames << new_hostname
+      end
+      
       new_nick.save
     end
     

@@ -1,0 +1,21 @@
+<%= form_for(@hostname) do |f| %>
+  <% if @hostname.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@hostname.errors.count, "error") %> prohibited this hostname from being saved:</h2>
+
+      <ul>
+      <% @hostname.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :domain_name %><br />
+    <%= f.text_field :domain_name %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

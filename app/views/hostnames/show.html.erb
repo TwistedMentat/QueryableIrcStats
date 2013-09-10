@@ -1,0 +1,10 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Domain name:</b>
+  <%= @hostname.domain_name %>
+</p>
+
+
+<%= link_to 'Edit', edit_hostname_path(@hostname) %> |
+<%= link_to 'Back', hostnames_path %>
