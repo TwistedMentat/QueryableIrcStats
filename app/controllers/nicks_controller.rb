@@ -2,7 +2,7 @@ class NicksController < ApplicationController
   # GET /nicks
   # GET /nicks.json
   def index
-    @nicks = Nick.all
+    @nicks = Nick.order("name asc")
 
     respond_to do |format|
       format.html # index.html.erb

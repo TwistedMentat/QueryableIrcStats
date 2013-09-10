@@ -6,11 +6,13 @@
     <th></th>
     <th></th>
     <th></th>
+    <th></th>
   </tr>
 
 <% @hostnames.each do |hostname| %>
   <tr>
     <td><%= hostname.domain_name %></td>
+    <td><% hostname.nicks.each do |n|%><%= link_to n.name, nick_path(n) %> <% end %>
     <td><%= link_to 'Show', hostname %></td>
     <td><%= link_to 'Edit', edit_hostname_path(hostname) %></td>
     <td><%= link_to 'Destroy', hostname, method: :delete, data: { confirm: 'Are you sure?' } %></td>
