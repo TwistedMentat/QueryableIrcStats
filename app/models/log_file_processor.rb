@@ -81,6 +81,7 @@ class LogFileProcessor
   def process_system_message(line)
     user_match = line.match(/^(\d\d):(\d\d) -!- (.*?) \[(.*?)@(.*?)\]/)
     if !user_match
+      log_unprocessable_line(line)
       return
     end
     
@@ -96,6 +97,8 @@ class LogFileProcessor
     if process_quit(line, nick.name, hour, minute)
       return
     end
+    
+    log_unprocessable_line(line)
   end
 
   ##
@@ -191,6 +194,15 @@ class LogFileProcessor
     found_messages = Message.where(:nick => name, :message => message_body, :said_at => said_at.change(:sec => 0)..said_at.change(:sec => 59))
     
     return found_messages.count > 0
+  end
+  
+  ##
+  # Logs any line that cannot be processed
+  def log_unprocessable_line(line)
+    unprocessable_line_filename = Rails.root.join("log", "unrocessable_lines.txt")
+    File.open(unprocessable_line_filename, "a") do |file|
+      file.write(line)
+    end
   end
   
 end
