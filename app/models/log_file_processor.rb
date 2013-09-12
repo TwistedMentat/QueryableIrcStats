@@ -37,8 +37,9 @@ class LogFileProcessor
       line.match(/^(\d\d):(\d\d) <.(.*?)> (.*)/)
 
       new_message = Message.new
+      nick = get_nick_with_just_name($3)
 
-      new_message.nick = $3
+      new_message.nick = nick
       new_message.message = $4
       new_message.said_at = Time.utc(@year, @month, @day, $1, $2)
       new_message.action = Action::SPEECH
@@ -60,7 +61,7 @@ class LogFileProcessor
 
       if nick
         message = Message.new
-        message.nick = nick.name
+        message.nick = nick
         message.message = $4
         message.said_at = Time.utc(@year, @month, @day, $1, $2)
         message.action = Action::EMOTE
@@ -80,23 +81,29 @@ class LogFileProcessor
   # This includes items such as joins, quits, kicks, bans, etc.
   def process_system_message(line)
     user_match = line.match(/^(\d\d):(\d\d) -!- (.*?) \[(.*?)@(.*?)\]/)
+
     if !user_match
-      log_unprocessable_line(line)
+
+      if process_nick_change(line)
+      else
+        log_unprocessable_line(line)
+      end
+      
       return
     end
-    
-    nick = get_nick_with_name_and_hostname($3, $4, $5)
     
     hour = $1
     minute = $2
+    nick = get_nick_with_name_and_hostname($3, $4, $5)
     
-    if process_join(line, nick.name, hour, minute)
+    if process_join(line, nick, hour, minute)
       return
     end
     
-    if process_quit(line, nick.name, hour, minute)
+    if process_quit(line, nick, hour, minute)
       return
     end
+    
     
     log_unprocessable_line(line)
   end
@@ -190,8 +197,8 @@ class LogFileProcessor
   #
   # Where someone rapidly repeats the same thing this will result in that being flattened into one item. 
   # I cannot think of a nicer way to avoid duplicates from multiple logfiles 
-  def is_message_already_logged(name, message_body, said_at)
-    found_messages = Message.where(:nick => name, :message => message_body, :said_at => said_at.change(:sec => 0)..said_at.change(:sec => 59))
+  def is_message_already_logged(nick, message_body, said_at)
+    found_messages = Message.where(:nick_id => nick.id, :message => message_body, :said_at => said_at.change(:sec => 0)..said_at.change(:sec => 59))
     
     return found_messages.count > 0
   end
@@ -201,8 +208,30 @@ class LogFileProcessor
   def log_unprocessable_line(line)
     unprocessable_line_filename = Rails.root.join("log", "unrocessable_lines.txt")
     File.open(unprocessable_line_filename, "a") do |file|
-      file.write(line)
+      file.write("#{DateTime.now.to_s} #{line}")
     end
+  end
+  
+  def process_nick_change(line)
+    if line.match(/^(\d\d):(\d\d) -!- (.*) is now known as (.*)/)
+      old_nick = Nick.where(:name => $3).first
+      if old_nick == nil
+         nick = Nick.new
+         nick.name = $3
+         nick.save
+      end
+      
+      new_nick = Nick.where(:name => $4).first
+      if new_nick == nil
+        nick = Nick.new
+        nick.name = $4
+        nick.save
+      end
+      
+      return true
+    end
+    
+    return false
   end
   
 end

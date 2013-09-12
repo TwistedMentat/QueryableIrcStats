@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130910093314) do
+ActiveRecord::Schema.define(:version => 20130912093104) do
 
   create_table "hostnames", :force => true do |t|
     t.string   "domain_name"
@@ -20,12 +20,12 @@ ActiveRecord::Schema.define(:version => 20130910093314) do
   end
 
   create_table "messages", :force => true do |t|
-    t.string   "nick"
     t.text     "message"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
     t.datetime "said_at"
     t.text     "action"
+    t.integer  "nick_id"
   end
 
   create_table "nick_hostnames", :force => true do |t|

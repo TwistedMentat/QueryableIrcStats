@@ -10,8 +10,18 @@
   <%= @nick.username %>
 </p>
 
+<p><%= @nick.hostnames.count %> Hostnames</p>
 <p>
-  
+  <% @nick.hostnames do |h| %>
+  <%= "#{h.domain_name}"%><br />
+  <% end %>
+</p>
+
+<p><%= "#{@nick.messages.count} messages recorded."%></p>
+<p>
+  <% @nick.messages.each do |m| %>
+  <%= "#{m.said_at.to_s} #{m.message}" %><br />
+  <% end %>
 </p>
 
 
