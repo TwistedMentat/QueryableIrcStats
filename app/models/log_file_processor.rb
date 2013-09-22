@@ -41,7 +41,7 @@ class LogFileProcessor
 
       new_message.nick = nick
       new_message.message = $4
-      new_message.said_at = Time.utc(@year, @month, @day, $1, $2)
+      record_time(Time.utc(@year, @month, @day, $1, $2), new_message)
       new_message.action = Action::SPEECH
     
       if(is_message_already_logged(new_message.nick, new_message.message, new_message.said_at))
@@ -63,7 +63,7 @@ class LogFileProcessor
         message = Message.new
         message.nick = nick
         message.message = $4
-        message.said_at = Time.utc(@year, @month, @day, $1, $2)
+        record_time(Time.utc(@year, @month, @day, $1, $2), message)
         message.action = Action::EMOTE
 
         message.save
@@ -164,7 +164,7 @@ class LogFileProcessor
     if line.match(/^\d\d:\d\d -!- .* has quit \[/)
       quit_message = Message.new
       quit_message.nick = nick
-      quit_message.said_at = Time.utc(@year, @month, @day, hour, minute)
+      record_time(Time.utc(@year, @month, @day, hour, minute), quit_message)
       quit_message.action = Action::QUIT
       quit_message.save
       
@@ -172,6 +172,12 @@ class LogFileProcessor
     end
     
     return false
+  end
+
+  def record_time(message_time, message) 
+    message.said_at = message_time
+    message.hour = message_time.strftime("%H").to_i
+    message.minute = message_time.strftime("%M").to_i
   end
 
   ##
@@ -182,7 +188,7 @@ class LogFileProcessor
     if line.match(/^\d\d:\d\d -!- .* has joined /)
       join_message = Message.new
       join_message.nick = nick
-      join_message.said_at = Time.utc(@year, @month, @day, hour, minute)
+      record_time(Time.utc(@year, @month, @day, hour, minute), join_message)
       join_message.action = Action::JOIN
       join_message.save
       

@@ -1,0 +1,17 @@
+<h2>Hourly stats</h2>
+<table>
+  <thead>
+    <tr>
+      <% @hourly_stats.each do |h| %>
+      <th><%= h.hour %></th>
+      <% end %>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <% @hourly_stats.each do |h| %>
+      <td><%= h.number_of_lines %></td>
+      <% end %>
+    </tr>
+  </tbody>
+</table>

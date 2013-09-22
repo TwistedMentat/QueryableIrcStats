@@ -15,6 +15,15 @@ class NicksController < ApplicationController
   def show
     @nick = Nick.find(params[:id])
 
+    @hourly_stats = Array.new
+    
+    (0..23).each{ |hour|
+      hourly_stat = HourlyStats.new
+      hourly_stat.hour = hour
+      hourly_stat.number_of_lines = Message.where(:hour => hour, :nick_id => @nick.id).count
+      @hourly_stats << hourly_stat
+    }
+
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @nick }

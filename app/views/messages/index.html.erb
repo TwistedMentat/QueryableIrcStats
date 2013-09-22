@@ -1,5 +1,7 @@
 <h1>Listing <%= @messages.count %> messages</h1>
 
+<%= render "shared/hourly_stats" %>
+
 <table>
   <tr>
     <th>Nick</th>
@@ -7,19 +9,15 @@
     <th>Said At</th>
     <th>Action</th>
     <th></th>
-    <th></th>
-    <th></th>
   </tr>
 
 <% @messages.each do |message| %>
   <tr>
-    <td><%= message.nick %></td>
+    <td><%= message.nick.name %></td>
     <td><%= auto_link message.message, mode=:all, link_attr=nil, skip_tags=nil %></td>
     <td class="time-string"><%= message.said_at.to_formatted_s(:long_ordinal) %></td>
     <td><%= message.action %></td>
     <td><%= link_to 'Show', message %></td>
-    <td><%= link_to 'Edit', edit_message_path(message) %></td>
-    <td><%= link_to 'Destroy', message, method: :delete, data: { confirm: 'Are you sure?' } %></td>
   </tr>
 <% end %>
 </table>

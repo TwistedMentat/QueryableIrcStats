@@ -4,6 +4,15 @@ class MessagesController < ApplicationController
   def index
     @messages = Message.paginate(:page => params[:page])
 
+    @hourly_stats = Array.new
+    
+    (0..23).each{ |hour|
+      hourly_stat = HourlyStats.new
+      hourly_stat.hour = hour
+      hourly_stat.number_of_lines = Message.where(:hour => hour).count
+      @hourly_stats << hourly_stat
+    }
+
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @messages }
