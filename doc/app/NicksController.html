@@ -111,6 +111,14 @@
   
     <li><a href="./ApplicationHelper.html">ApplicationHelper</a>
   
+    <li><a href="./Hostname.html">Hostname</a>
+  
+    <li><a href="./HostnamesController.html">HostnamesController</a>
+  
+    <li><a href="./HostnamesHelper.html">HostnamesHelper</a>
+  
+    <li><a href="./HourlyStats.html">HourlyStats</a>
+  
     <li><a href="./LogFileController.html">LogFileController</a>
   
     <li><a href="./LogFileProcessor.html">LogFileProcessor</a>
@@ -124,6 +132,8 @@
     <li><a href="./MessagesHelper.html">MessagesHelper</a>
   
     <li><a href="./Nick.html">Nick</a>
+  
+    <li><a href="./NickHostname.html">NickHostname</a>
   
     <li><a href="./NicksController.html">NicksController</a>
   
@@ -176,7 +186,7 @@
 
           
           <div class="method-source-code" id="create-source">
-            <pre><span class="ruby-comment"># File app/controllers/nicks_controller.rb, line 42</span>
+            <pre><span class="ruby-comment"># File app/controllers/nicks_controller.rb, line 51</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">create</span>
   <span class="ruby-ivar">@nick</span> = <span class="ruby-constant">Nick</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:nick</span>])
 
@@ -216,7 +226,7 @@
 
           
           <div class="method-source-code" id="destroy-source">
-            <pre><span class="ruby-comment"># File app/controllers/nicks_controller.rb, line 74</span>
+            <pre><span class="ruby-comment"># File app/controllers/nicks_controller.rb, line 83</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">destroy</span>
   <span class="ruby-ivar">@nick</span> = <span class="ruby-constant">Nick</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
   <span class="ruby-ivar">@nick</span>.<span class="ruby-identifier">destroy</span>
@@ -252,7 +262,7 @@
 
           
           <div class="method-source-code" id="edit-source">
-            <pre><span class="ruby-comment"># File app/controllers/nicks_controller.rb, line 36</span>
+            <pre><span class="ruby-comment"># File app/controllers/nicks_controller.rb, line 45</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">edit</span>
   <span class="ruby-ivar">@nick</span> = <span class="ruby-constant">Nick</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
 <span class="ruby-keyword">end</span></pre>
@@ -284,7 +294,7 @@
           <div class="method-source-code" id="index-source">
             <pre><span class="ruby-comment"># File app/controllers/nicks_controller.rb, line 4</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">index</span>
-  <span class="ruby-ivar">@nicks</span> = <span class="ruby-constant">Nick</span>.<span class="ruby-identifier">all</span>
+  <span class="ruby-ivar">@nicks</span> = <span class="ruby-constant">Nick</span>.<span class="ruby-identifier">order</span>(<span class="ruby-string">&quot;name asc&quot;</span>)
 
   <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
     <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> <span class="ruby-comment"># index.html.erb</span>
@@ -317,7 +327,7 @@
 
           
           <div class="method-source-code" id="new-source">
-            <pre><span class="ruby-comment"># File app/controllers/nicks_controller.rb, line 26</span>
+            <pre><span class="ruby-comment"># File app/controllers/nicks_controller.rb, line 35</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">new</span>
   <span class="ruby-ivar">@nick</span> = <span class="ruby-constant">Nick</span>.<span class="ruby-identifier">new</span>
 
@@ -356,6 +366,15 @@
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">show</span>
   <span class="ruby-ivar">@nick</span> = <span class="ruby-constant">Nick</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
 
+  <span class="ruby-ivar">@hourly_stats</span> = <span class="ruby-constant">Array</span>.<span class="ruby-identifier">new</span>
+  
+  (<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">23</span>).<span class="ruby-identifier">each</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">hour</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">hourly_stat</span> = <span class="ruby-constant">HourlyStats</span>.<span class="ruby-identifier">new</span>
+    <span class="ruby-identifier">hourly_stat</span>.<span class="ruby-identifier">hour</span> = <span class="ruby-identifier">hour</span>
+    <span class="ruby-identifier">hourly_stat</span>.<span class="ruby-identifier">number_of_lines</span> = <span class="ruby-constant">Message</span>.<span class="ruby-identifier">where</span>(<span class="ruby-value">:hour</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">hour</span>, <span class="ruby-value">:nick_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@nick</span>.<span class="ruby-identifier">id</span>).<span class="ruby-identifier">count</span>
+    <span class="ruby-ivar">@hourly_stats</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">hourly_stat</span>
+  }
+
   <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
     <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> <span class="ruby-comment"># show.html.erb</span>
     <span class="ruby-identifier">format</span>.<span class="ruby-identifier">json</span> { <span class="ruby-identifier">render</span> <span class="ruby-identifier">json</span><span class="ruby-operator">:</span> <span class="ruby-ivar">@nick</span> }
@@ -387,7 +406,7 @@
 
           
           <div class="method-source-code" id="update-source">
-            <pre><span class="ruby-comment"># File app/controllers/nicks_controller.rb, line 58</span>
+            <pre><span class="ruby-comment"># File app/controllers/nicks_controller.rb, line 67</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">update</span>
   <span class="ruby-ivar">@nick</span> = <span class="ruby-constant">Nick</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
 
