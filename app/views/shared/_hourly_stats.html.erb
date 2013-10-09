@@ -1,16 +1,16 @@
-<h2>Hourly stats</h2>
+<h2><%= section_title %></h2>
 <table>
   <thead>
     <tr>
-      <% @hourly_stats.each do |h| %>
+      <% hourly_stats.each do |h| %>
       <th><%= h.hour %></th>
       <% end %>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <% @hourly_stats.each do |h| %>
-      <td><%= h.number_of_lines %></td>
+      <% hourly_stats.each do |h| %>
+      <td><%= h.value %></td>
       <% end %>
     </tr>
   </tbody>

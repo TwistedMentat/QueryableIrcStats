@@ -9,7 +9,7 @@ class MessagesController < ApplicationController
     (0..23).each{ |hour|
       hourly_stat = HourlyStats.new
       hourly_stat.hour = hour
-      hourly_stat.number_of_lines = Message.where(:hour => hour).count
+      hourly_stat.value = Message.where(:hour => hour).count
       @hourly_stats << hourly_stat
     }
 

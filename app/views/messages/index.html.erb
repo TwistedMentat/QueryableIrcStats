@@ -1,6 +1,6 @@
 <h1>Listing <%= @messages.count %> messages</h1>
 
-<%= render "shared/hourly_stats" %>
+<%= render partial: "shared/hourly_stats", locals: {hourly_stats: @hourly_stats, section_title: "Lines per hour"} %>
 
 <table>
   <tr>
