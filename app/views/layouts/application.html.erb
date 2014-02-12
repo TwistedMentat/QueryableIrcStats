@@ -7,8 +7,22 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
+  <div id="wrap">
+    <div id="siteHeader">
+      <h1>Queryable Spacebatles IRC stats</h1>
+    </div>
 
-<%= yield %>
+  <div id="leftColumn">
+    <ul>
+      <li><%= link_to "Messages", controller: "messages", action: "index" %></li>
+      <li><%= link_to "Nicks", controller: "nicks", action: "index" %></li>
+      <li><%= link_to "Hostnames", controller: "hostnames", action: "index" %></li>
+    </ul>
+  </div>
 
+  <div id="content">
+    <%= yield %>
+  </div>
+</div>
 </body>
 </html>

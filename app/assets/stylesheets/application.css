@@ -11,3 +11,28 @@
  *= require_self
  *= require_tree .
  */
+
+.odd{
+  background-color: red;
+}
+
+#siteHeader{
+  display: block;
+  height: 100px;
+}
+
+#leftColumn{
+  display: block;
+  float: left;
+  width: 10em;
+}
+
+#content{
+  display: block;
+  float: right;
+  width: 70em;
+}
+
+#wrap{
+  width: 80em;
+}

@@ -6,8 +6,6 @@
     <th>Hostnames</th>
     <th>Username</th>
     <th></th>
-    <th></th>
-    <th></th>
   </tr>
 
 <% @nicks.each do |nick| %>
@@ -16,8 +14,6 @@
     <td><% nick.hostnames.each do |h|%><%= link_to h.domain_name, hostname_path(h) %> <% end %>
     <td><%= nick.username %></td>
     <td><%= link_to 'Show', nick %></td>
-    <td><%= link_to 'Edit', edit_nick_path(nick) %></td>
-    <td><%= link_to 'Destroy', nick, method: :delete, data: { confirm: 'Are you sure?' } %></td>
   </tr>
 <% end %>
 </table>

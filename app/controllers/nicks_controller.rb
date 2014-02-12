@@ -20,9 +20,18 @@ class NicksController < ApplicationController
     (0..23).each{ |hour|
       hourly_stat = HourlyStats.new
       hourly_stat.hour = hour
-      hourly_stat.number_of_lines = Message.where(:hour => hour, :nick_id => @nick.id).count
+      hourly_stat.value = Message.where(:hour => hour, :nick_id => @nick.id).count
       @hourly_stats << hourly_stat
     }
+    
+    @number_of_words_per_hour = Array.new
+    (0..23).each{ |hour|
+      number_of_words_per_hour = HourlyStats.new
+      number_of_words_per_hour.hour = hour
+      number_of_words_per_hour.number_of_lines = Message.where(:hour => hour, :nick_id => @nick.id).count
+      @hourly_stats << hourly_stat
+    }
+
 
     respond_to do |format|
       format.html # show.html.erb
