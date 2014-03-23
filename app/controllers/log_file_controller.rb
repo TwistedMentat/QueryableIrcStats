@@ -25,6 +25,22 @@ class LogFileController < ApplicationController
       file.write(uploaded_io.read)
     end
     
+    line_number = 0
+    file_suffix = 1
+    
+    IO.foreach(saved_filename) do |line|
+      if(line_number % 200 == 0)
+        file_suffix = file_suffix + 1
+      end
+
+      File.open("#{saved_filename}.split#{file_suffix}.log", "a+") do |split_file|
+        split_file.write(line)
+      end
+
+      line_number = line_number + 1
+      
+    end
+    
     processor = LogFileProcessor.new
     
     processor.process_log_file(saved_filename)

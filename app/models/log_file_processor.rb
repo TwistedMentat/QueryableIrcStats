@@ -8,8 +8,6 @@ class LogFileProcessor
   ##
   # Process the provided log file and add the values into the database
   def process_log_file(filename_of_log_file)
-    # Need to start logging when lines are skipped.
-    # Perhaps create a new file that logs all unprocessable lines
     IO.foreach(filename_of_log_file) do |line|
     
       if line.match(/^$/)
@@ -103,7 +101,6 @@ class LogFileProcessor
     if process_quit(line, nick, hour, minute)
       return
     end
-    
     
     log_unprocessable_line(line)
   end
