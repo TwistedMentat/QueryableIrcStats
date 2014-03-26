@@ -5,6 +5,21 @@ class LogFileProcessor
   @month = "jan"
   @year = 2013
 
+  def process_log_files()
+    uploads_to_process_folder = Rails.root.join('public', 'uploads')
+    Rails.logger.info "Process folder #{uploads_to_process_folder}"
+    files_to_process = Dir.glob(File.join(uploads_to_process_folder, "*.*"))
+    
+    
+    
+    files_to_process.each do |filename|
+      Rails.logger.info "Processing file #{filename}"
+      process_log_file(filename)
+      #File.join(uploads_to_process_folder, filename)
+      File.delete(filename)
+    end
+  end
+
   ##
   # Process the provided log file and add the values into the database
   def process_log_file(filename_of_log_file)

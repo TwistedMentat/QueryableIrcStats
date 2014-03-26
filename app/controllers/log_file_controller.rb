@@ -33,7 +33,7 @@ class LogFileController < ApplicationController
         file_suffix = file_suffix + 1
       end
 
-      File.open("#{saved_filename}.split#{file_suffix}.log", "a+") do |split_file|
+      File.open(Rails.root.join('public', 'uploads', "#{saved_filename}.split#{file_suffix}.log"), "a+") do |split_file|
         split_file.write(line)
       end
 
@@ -41,8 +41,10 @@ class LogFileController < ApplicationController
       
     end
     
+    File.delete(saved_filename)
     processor = LogFileProcessor.new
     
-    processor.process_log_file(saved_filename)
+    processor.process_log_files()
+    #processor.process_log_file(saved_filename)
   end
 end
