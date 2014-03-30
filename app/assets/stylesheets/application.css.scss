@@ -12,8 +12,14 @@
  *= require_tree .
  */
 
+@import 'constants';
+
 .odd{
-  background-color: red;
+  background-color: $background-primary-color;
+}
+
+#messagesTable{
+  border-width: 0;
 }
 
 #siteHeader{
@@ -35,4 +41,12 @@
 
 #wrap{
   width: 80em;
+}
+
+h1{
+  color: $foreground-primary-color;
+}
+
+h2{
+  color: $foreground-primary-color;
 }
