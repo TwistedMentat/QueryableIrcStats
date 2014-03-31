@@ -15,11 +15,11 @@
 @import 'constants';
 
 .odd{
-  background-color: $background-primary-color;
+  background-color: $highlight-primary-color;
 }
 
 #messagesTable{
-  border-width: 0;
+  border-collapse: collapse;
 }
 
 #siteHeader{
@@ -37,10 +37,12 @@
   display: block;
   float: right;
   width: 70em;
+  background-color: #fff;
+  padding: 1em;
 }
 
 #wrap{
-  width: 80em;
+  width: 85em;
 }
 
 h1{
@@ -48,5 +50,6 @@ h1{
 }
 
 h2{
-  color: $foreground-primary-color;
+  color: $foreground-secondary-color;
 }
+
