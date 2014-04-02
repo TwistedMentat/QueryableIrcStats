@@ -40,7 +40,11 @@ class HostnamesController < ApplicationController
   # POST /hostnames
   # POST /hostnames.json
   def create
-    @hostname = Hostname.new(params[:hostname])
+#    @hostname = Hostname.new()
+#    @hostname.update_attributes!(hostname_params)
+    @hostname = Hostname.create!(params.require(:hostname).permit(:hostname))
+
+#    params[:hostname]
 
     respond_to do |format|
       if @hostname.save
@@ -79,5 +83,9 @@ class HostnamesController < ApplicationController
       format.html { redirect_to hostnames_url }
       format.json { head :no_content }
     end
+  end
+  
+  private
+  def hostname_params
   end
 end

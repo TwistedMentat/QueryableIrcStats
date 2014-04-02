@@ -65,7 +65,7 @@ class MessagesController < ApplicationController
   # POST /messages
   # POST /messages.json
   def create
-    @message = Message.new(params[:message])
+    @message = Message.new(params.require(:message).permit(:message, :said_at, :action, :nick_id))
 
     respond_to do |format|
       if @message.save
@@ -84,7 +84,7 @@ class MessagesController < ApplicationController
     @message = Message.find(params[:id])
 
     respond_to do |format|
-      if @message.update_attributes(params[:message])
+      if @message.update_attributes(params.require(:message).permit(:message, :said_at, :action, :nick_id))
         format.html { redirect_to @message, notice: 'Message was successfully updated.' }
         format.json { head :no_content }
       else

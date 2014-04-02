@@ -58,7 +58,7 @@ class NicksController < ApplicationController
   # POST /nicks
   # POST /nicks.json
   def create
-    @nick = Nick.new(params[:nick])
+    @nick = Nick.new(params.require(:nick))
 
     respond_to do |format|
       if @nick.save

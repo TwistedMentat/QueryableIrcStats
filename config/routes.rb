@@ -1,13 +1,15 @@
 QueryableIrcStats::Application.routes.draw do
+  devise_for :users
+
   resources :hostnames
 
 
   resources :nicks
   resources :messages
 
-  match 'log_file' => 'log_file#view'
-  match 'log_file/new' => 'log_file#new' 
-  match 'log_file/save' => 'log_file#save'
+  match 'log_file' => 'log_file#view', :via => [:get]
+  match 'log_file/new' => 'log_file#new', :via => [:get, :post]
+  match 'log_file/save' => 'log_file#save', :via => [:get]
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
@@ -58,7 +60,7 @@ QueryableIrcStats::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
-  # root :to => 'welcome#index'
+  root :to => 'messages#index'
 
   # See how all your routes lay out with "rake routes"
 

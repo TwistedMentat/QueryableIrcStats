@@ -1,6 +1,8 @@
 class LogFileController < ApplicationController
+  before_action :authenticate_user!
   # GET /log_file/
   # GET /log_file/
+
   def view
     redirect_to action: 'new'
   end
@@ -8,9 +10,15 @@ class LogFileController < ApplicationController
   # GET /log_file/new
   # GET /log_file/new.json
   def new
-    respond_to do |format|
-      format.html # new.html.erb
+    is_signed_in = user_signed_in?
+  
+    if is_signed_in
+      respond_to do |format|
+        format.html # new.html.erb
+      end
     end
+    
+    redirect_to :root
   end
   
   # POST /log_files
@@ -45,6 +53,5 @@ class LogFileController < ApplicationController
     processor = LogFileProcessor.new
     
     processor.process_log_files()
-    #processor.process_log_file(saved_filename)
   end
 end
