@@ -28,8 +28,14 @@ class NicksController < ApplicationController
     (0..23).each{ |hour|
       number_of_words_per_hour = HourlyStats.new
       number_of_words_per_hour.hour = hour
-      number_of_words_per_hour.number_of_lines = Message.where(:hour => hour, :nick_id => @nick.id).count
-      @hourly_stats << hourly_stat
+      number_of_words_per_hour.value = 0;
+      Message.where(:hour => hour, :nick_id => @nick.id).each do |line|
+        if line.message == nil then
+          next
+        end
+        number_of_words_per_hour.value += line.message.squeeze(' ').split(%r{\s}).count
+      end
+      @number_of_words_per_hour << number_of_words_per_hour
     }
 
 

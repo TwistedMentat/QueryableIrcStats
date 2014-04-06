@@ -10,19 +10,19 @@
   <div id="wrap">
     <div id="siteHeader">
       <h1>Queryable Spacebatles IRC stats</h1>
+      <p class="notice"><%= notice %></p>
+      <p class="alert"><%= alert %></p>
     </div>
 
   <div id="leftColumn">
     <ul>
-      <li><%= link_to "Messages", controller: "messages", action: "index" %></li>
-      <li><%= link_to "Nicks", controller: "nicks", action: "index" %></li>
-      <li><%= link_to "Hostnames", controller: "hostnames", action: "index" %></li>
+      <li><%= link_to "Messages", messages_path %></li>
+      <li><%= link_to "Nicknames", nicks_path %></li>
+      <li><%= link_to "Hostnames", hostnames_path %></li>
     </ul>
   </div>
 
   <div id="content">
-    <p class="notice"><%= notice %></p>
-    <p class="alert"><%= alert %></p>
     
     <%= yield %>
   </div>

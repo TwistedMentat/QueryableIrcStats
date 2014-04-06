@@ -9,7 +9,7 @@ QueryableIrcStats::Application.routes.draw do
 
   match 'log_file' => 'log_file#view', :via => [:get]
   match 'log_file/new' => 'log_file#new', :via => [:get, :post]
-  match 'log_file/save' => 'log_file#save', :via => [:get]
+  match 'log_file/save' => 'log_file#save', :via => [:get, :post]
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

@@ -16,9 +16,10 @@ class LogFileController < ApplicationController
       respond_to do |format|
         format.html # new.html.erb
       end
+    else
+      redirect_to :root
     end
     
-    redirect_to :root
   end
   
   # POST /log_files

@@ -17,12 +17,31 @@
   <% end %>
 </p>
 
-<%= render "shared/hourly_stats" %>
+<%= render partial: "shared/hourly_stats", locals: {hourly_stats: @hourly_stats, section_title: "Lines per hour"} %>
+
+<%= render partial: "shared/hourly_stats", locals: {hourly_stats: @number_of_words_per_hour, section_title: "Words per hour"} %>
 
 <p><%= "#{@nick.messages.count} messages recorded."%></p>
-<p>
-  <% @nick.messages.each do |m| %>
-  <%= "#{m.said_at.to_s} #{m.message}" %><br />
+
+<table id="messagesTable">
+  <thead>
+    <tr>
+      <th>Message</th>
+      <th>Said At</th>
+      <th>Action</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+  <% @nick.messages.each_with_index do |message, index| %>
+    <% if (index % 2) == 0 then rowStyle = "odd" else rowStyle = "even" end %>
+    <tr class="<%=rowStyle%>">
+      <td><%= auto_link message.message, mode=:all, link_attr=nil, skip_tags=nil %></td>
+      <td class="time-string"><%= message.said_at.to_formatted_s(:long_ordinal) %></td>
+      <td><%= message.action %></td>
+      <td><%= link_to 'Show', message %></td>
+    </tr>
   <% end %>
-</p>
+  </tbody>
+</table>
 
