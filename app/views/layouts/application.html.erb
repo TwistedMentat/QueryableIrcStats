@@ -10,9 +10,12 @@
   <div id="wrap">
     <div id="siteHeader">
       <h1>Queryable Spacebatles IRC stats</h1>
-      <p class="notice"><%= notice %></p>
-      <p class="alert"><%= alert %></p>
-    </div>
+      <%-# Foudn this nice example.  https://github.com/plataformatec/devise/wiki/How-To:-Add-sign_in,-sign_out,-and-sign_up-links-to-your-layout-template -%>
+      <ul class="hmenu">
+        <%= render 'devise/menu/registration_items' %>
+        <%= render 'devise/menu/login_items' %>
+      </ul>
+  </div>
 
   <div id="leftColumn">
     <ul>
@@ -23,6 +26,8 @@
   </div>
 
   <div id="content">
+    <p class="notice"><%= notice %></p>
+    <p class="alert"><%= alert %></p>
     
     <%= yield %>
   </div>
