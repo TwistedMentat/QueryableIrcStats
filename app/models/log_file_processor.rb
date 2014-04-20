@@ -16,7 +16,6 @@ class LogFileProcessor
       Rails.logger.info "Processing file #{filename}"
       process_log_file(filename)
       #File.join(uploads_to_process_folder, filename)
-      File.delete(filename)
     end
   end
 
@@ -30,13 +29,14 @@ class LogFileProcessor
       end
     
       if line.match(/^---/) then
+        log_unprocessable_line(line)
         line.match(/(\w\w\w) (\d\d)(?: \d\d:\d\d:\d\d)? (\d\d\d\d)/)
         @day = $2
         @month = $1
         @year = $3
         next
       end
-      
+            
       if line.match(/^\d\d:\d\d -!-/) then
         process_system_message(line)
         next
@@ -55,13 +55,6 @@ class LogFileProcessor
       new_message.nick = nick
       new_message.message = $4
       
-      if($1 == nil || $2 == nil || @year == nil || @month == nil || @day == nil)
-        log_unprocessable_line(line)
-        log_unprocessable_line($1)
-        log_unprocessable_line($2)
-        next
-      end
-      
       record_time(Time.utc(@year, @month, @day, $1, $2), new_message)
       new_message.action = Action::SPEECH
     
@@ -71,7 +64,15 @@ class LogFileProcessor
 
       new_message.save
     
+      
+      if($1 == nil || $2 == nil || @year == nil || @month == nil || @day == nil)
+        log_unprocessable_line(line)
+        next
+      end
     end
+    
+    File.delete(filename_of_log_file)
+    
   end
   
   ##
@@ -205,6 +206,7 @@ class LogFileProcessor
   # 
   # Returns: +true+ if the line is a join message +false+ otherwise.
   def process_join(line, nick, hour, minute)
+
     if line.match(/^\d\d:\d\d -!- .* has joined /)
       join_message = Message.new
       join_message.nick = nick
@@ -232,9 +234,9 @@ class LogFileProcessor
   ##
   # Logs any line that cannot be processed
   def log_unprocessable_line(line)
-    unprocessable_line_filename = Rails.root.join("log", "unrocessable_lines.txt")
+    unprocessable_line_filename = Rails.root.join("log", "unprocessable_lines.txt")
     File.open(unprocessable_line_filename, "a") do |file|
-      file.write("#{DateTime.now.to_s} #{line}")
+      file.write("#{line}")
     end
   end
   
