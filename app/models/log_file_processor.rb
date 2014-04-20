@@ -9,10 +9,11 @@ class LogFileProcessor
     uploads_to_process_folder = Rails.root.join('public', 'uploads')
     Rails.logger.info "Process folder #{uploads_to_process_folder}"
     files_to_process = Dir.glob(File.join(uploads_to_process_folder, "*.*"))
+    files_to_process_sorted = files_to_process.sort_by {|filename| File.mtime(filename) }
     
     
     
-    files_to_process.each do |filename|
+    files_to_process_sorted.each do |filename|
       Rails.logger.info "Processing file #{filename}"
       process_log_file(filename)
       #File.join(uploads_to_process_folder, filename)
