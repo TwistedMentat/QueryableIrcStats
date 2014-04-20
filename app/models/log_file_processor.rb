@@ -54,6 +54,14 @@ class LogFileProcessor
 
       new_message.nick = nick
       new_message.message = $4
+      
+      if($1 == nil || $2 == nil || @year == nil || @month == nil || @day == nil)
+        log_unprocessable_line(line)
+        log_unprocessable_line($1)
+        log_unprocessable_line($2)
+        next
+      end
+      
       record_time(Time.utc(@year, @month, @day, $1, $2), new_message)
       new_message.action = Action::SPEECH
     
