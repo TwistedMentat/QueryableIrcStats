@@ -35,26 +35,27 @@ class LogFileController < ApplicationController
         file.write(uploaded_io.read)
       end
     
-      line_number = 0
-      file_suffix = 1
+#      line_number = 0
+#      file_suffix = 0
+#    
+#      IO.foreach(saved_filename) do |line|
+#        if(line_number % 200 == 0)
+#          file_suffix = file_suffix + 1
+#        end
+#
+#        File.open(Rails.root.join('public', 'uploads', "#{saved_filename}.split#{"%030d" % file_suffix}.log"), "a+") do |split_file|
+#          split_file.write(line)
+#        end
+#
+#        line_number = line_number + 1
+#      
+#      end
     
-      IO.foreach(saved_filename) do |line|
-        if(line_number % 200 == 0)
-          file_suffix = file_suffix + 1
-        end
-
-        File.open(Rails.root.join('public', 'uploads', "#{saved_filename}.split#{"%030d" % file_suffix}.log"), "a+") do |split_file|
-          split_file.write(line)
-        end
-
-        line_number = line_number + 1
-      
-      end
-    
-      File.delete(saved_filename)
+#      File.delete(saved_filename)
       processor = LogFileProcessor.new
       
       thr = Thread.new { processor.process_log_files() }
+      #processor.process_log_files()
     end
   end
 end

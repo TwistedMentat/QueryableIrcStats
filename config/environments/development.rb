@@ -30,7 +30,7 @@ QueryableIrcStats::Application.configure do
   
   # Create a new logging file
   #config.logger = Log4r::Logger.new("Application Log")
-  config.log_level = :debug
+  config.log_level = :info
   
   config.action_mailer.default_url_options = { host: 'localhost:3000' }
 

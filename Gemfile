@@ -18,6 +18,8 @@ gem 'rinku', '~> 1.7.0', :require => 'rails_rinku'
 
 gem 'devise'
 
+gem 'pg'
+
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
 
