@@ -2,7 +2,7 @@ class MessagesController < ApplicationController
   # GET /messages
   # GET /messages.json
   def index
-    @messages = Message.paginate(:page => params[:page])
+    @messages = Message.where("said_at > ?", 3.months.ago).order("said_at ASC").paginate(:page => params[:page])
 
     @hourly_stats = Array.new
     
