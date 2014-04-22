@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140407092733) do
+ActiveRecord::Schema.define(version: 20140422090154) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,6 +31,8 @@ ActiveRecord::Schema.define(version: 20140407092733) do
     t.integer  "nick_id"
     t.integer  "hour"
     t.integer  "minute"
+    t.boolean  "processed"
+    t.boolean  "duplicate"
   end
 
   create_table "nick_hostnames", force: true do |t|
