@@ -11,8 +11,6 @@ class LogFileProcessor
     files_to_process = Dir.glob(File.join(uploads_to_process_folder, "*.*"))
     files_to_process_sorted = files_to_process.sort_by {|filename| File.mtime(filename) }
     
-    
-    
     files_to_process_sorted.each do |filename|
       Rails.logger.info "#{Time.now.inspect} Processing file #{filename}"
       process_log_file(filename)
@@ -59,10 +57,6 @@ class LogFileProcessor
         record_time(Time.utc(@year, @month, @day, $1, $2), new_message)
         new_message.action = Action::SPEECH
       
-        if(is_message_already_logged(new_message.nick, new_message.message, new_message.said_at))
-          next
-        end
-
         new_message.save
       
       
@@ -222,18 +216,6 @@ class LogFileProcessor
       return true
     end
     
-    return false
-  end
-  
-  ##
-  # Check that the message has not already been saved to the database.
-  #
-  # Where someone rapidly repeats the same thing this will result in that being flattened into one item. 
-  # I cannot think of a nicer way to avoid duplicates from multiple logfiles 
-  def is_message_already_logged(nick, message_body, said_at)
-    #found_messages = Message.where(:nick_id => nick.id, :message => message_body, :said_at => said_at.change(:sec => 0)..said_at.change(:sec => 59))
-    
-    #return found_messages.count > 0
     return false
   end
   
