@@ -1,18 +1,18 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <b>Name:</b>
+  <h2>Name:</h2>
   <%= @nick.name %>
 </p>
 
 <p>
-  <b>Username:</b>
+  <h2>Username:</h2>
   <%= @nick.username %>
 </p>
 
-<p><%= @nick.hostnames.count %> Hostnames</p>
+<h2><%= pluralize(@nick.hostnames.count, "Hostname") %></h2>
 <p>
-  <% @nick.hostnames do |h| %>
+  <% @nick.hostnames.each do |h| %>
   <%= "#{h.domain_name}"%><br />
   <% end %>
 </p>

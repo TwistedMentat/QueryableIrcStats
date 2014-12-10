@@ -1,8 +1,15 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <b>Domain name:</b>
+  <h2>Domain name:</h2>
   <%= @hostname.domain_name %>
+</p>
+
+<p>
+	<h2><%= pluralize(@hostname.nicks.count, "handle") %> used:</h2>
+	<% @hostname.nicks.each do |nick| %>
+	<%= link_to nick.name, nick %><br />
+	<% end %>
 </p>
 
 
