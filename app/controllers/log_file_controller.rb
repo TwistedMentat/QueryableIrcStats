@@ -10,7 +10,7 @@ class LogFileController < ApplicationController
   # GET /log_file/new
   # GET /log_file/new.json
   def new
-    is_signed_in = user_signed_in?
+    is_signed_in = current_user.can_upload_log?
   
     if is_signed_in
       respond_to do |format|

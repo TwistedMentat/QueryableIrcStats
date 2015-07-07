@@ -22,6 +22,9 @@
       <li><%= link_to "Messages", messages_path %></li>
       <li><%= link_to "Nicknames", nicks_path %></li>
       <li><%= link_to "Hostnames", hostnames_path %></li>
+      <% if current_user && current_user.can_upload_log? -%>
+      <li><%= link_to "Log File Upload", log_file_path %></li>
+      <% end -%>
     </ul>
   </div>
 
