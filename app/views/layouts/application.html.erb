@@ -9,8 +9,8 @@
 <body>
   <div id="wrap">
     <div id="siteHeader">
-      <h1>Queryable Spacebatles IRC stats</h1>
-      <%-# Foudn this nice example.  https://github.com/plataformatec/devise/wiki/How-To:-Add-sign_in,-sign_out,-and-sign_up-links-to-your-layout-template -%>
+      <h1>Queryable Sufficient Velocity IRC stats</h1>
+      <%-# Found this nice example.  https://github.com/plataformatec/devise/wiki/How-To:-Add-sign_in,-sign_out,-and-sign_up-links-to-your-layout-template -%>
       <ul class="hmenu">
         <%= render 'devise/menu/registration_items' %>
         <%= render 'devise/menu/login_items' %>
@@ -23,7 +23,7 @@
       <li><%= link_to "Nicknames", nicks_path %></li>
       <li><%= link_to "Hostnames", hostnames_path %></li>
       <% if current_user && current_user.can_upload_log? -%>
-      <li><%= link_to "Log File Upload", log_file_path %></li>
+      <li><%= link_to "Log Upload", log_file_path %></li>
       <% end -%>
     </ul>
   </div>
