@@ -20,6 +20,8 @@ gem 'devise'
 
 gem 'pg'
 
+gem 'capistrano', '~> 3.4.0'
+
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
 
