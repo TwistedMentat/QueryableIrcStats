@@ -20,7 +20,7 @@
 # role :app, %w{deploy@example.com}, my_property: :my_value
 # role :web, %w{user1@primary.com user2@additional.com}, other_property: :other_value
 # role :db,  %w{deploy@example.com}
-
+role :web, %w{deploy@ec2-54-68-51-185.us-west-2.compute.amazonaws.com}
 
 
 # Configuration
@@ -46,6 +46,9 @@
 #    forward_agent: false,
 #    auth_methods: %w(password)
 #  }
+set :ssh_options, {
+    keys: %w(/Users/James/.ssh/aws_deploy.pem)
+}
 #
 # The server-based syntax can be used to override options:
 # ------------------------------------
