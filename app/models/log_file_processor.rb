@@ -70,7 +70,7 @@ class LogFileProcessor
       end
     end
     
-    File.delete(filename_of_log_file)
+    #File.delete(filename_of_log_file)
     
   end
   
