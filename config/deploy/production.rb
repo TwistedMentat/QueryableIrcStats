@@ -30,6 +30,7 @@ role :web, %w{deploy@ec2-54-68-51-185.us-west-2.compute.amazonaws.com}
 # For available Capistrano configuration variables see the documentation page.
 # http://capistranorb.com/documentation/getting-started/configuration/
 # Feel free to add new variables to customise your setup.
+config.log_level = :info
 
 
 
