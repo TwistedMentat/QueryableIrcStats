@@ -24,7 +24,7 @@ class LogFileController < ApplicationController
   # 
   # Take the given file and save it to disc.
   def save
-    if current_user.admin? == false
+    if current_user.can_upload_log? == false
       uploaded_io = params[:log_file]
 
       saved_filename = Rails.root.join('public', 'uploads', "#{Time.new.strftime("%Y-%m-%d-%H%M%S")}_#{uploaded_io.original_filename}")
@@ -34,11 +34,14 @@ class LogFileController < ApplicationController
       File.open(saved_filename, 'wb') do |file|
         file.write(uploaded_io.read)
       end
+      
       processor = LogFileProcessor.new
 
       logger.info "Saved uploaded file to #{saved_filename}"
       
       thr = Thread.new { processor.process_log_files() }
+    else
+      logger.warn "The current user \"#{current_user.email}\" is not able to upload a file."
     end
   end
 end
