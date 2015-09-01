@@ -14,7 +14,7 @@ class LogFileProcessor
     files_to_process_sorted.each do |filename|
       Rails.logger.info "#{Time.now.inspect} Processing file #{filename}"
       process_log_file(filename)
-      #File.join(uploads_to_process_folder, filename)
+      File.delete(filename_of_log_file)
     end
   end
 
@@ -70,7 +70,6 @@ class LogFileProcessor
       end
     end
     
-    #File.delete(filename_of_log_file)
     
   end
   
