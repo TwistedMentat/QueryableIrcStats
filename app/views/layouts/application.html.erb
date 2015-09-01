@@ -15,25 +15,29 @@
         <%= render 'devise/menu/registration_items' %>
         <%= render 'devise/menu/login_items' %>
       </ul>
-  </div>
+    </div>
 
-  <div id="leftColumn">
-    <ul>
-      <li><%= link_to "Messages", messages_path %></li>
-      <li><%= link_to "Nicknames", nicks_path %></li>
-      <li><%= link_to "Hostnames", hostnames_path %></li>
-      <% if current_user && current_user.can_upload_log? -%>
-      <li><%= link_to "Log Upload", log_file_path %></li>
-      <% end -%>
-    </ul>
-  </div>
+    <div id="leftColumn">
+      <ul>
+        <li><%= link_to "Messages", messages_path %></li>
+        <li><%= link_to "Nicknames", nicks_path %></li>
+        <li><%= link_to "Hostnames", hostnames_path %></li>
+        <% if current_user && current_user.can_upload_log? -%>
+        <li><%= link_to "Log Upload", log_file_path %></li>
+        <% end -%>
+      </ul>
+    </div>
 
-  <div id="content">
-    <p class="notice"><%= notice %></p>
-    <p class="alert"><%= alert %></p>
+    <div id="content">
+      <p class="notice"><%= notice %></p>
+      <p class="alert"><%= alert %></p>
+      
+      <%= yield %>
+    </div>
     
-    <%= yield %>
+    <div id="footer">
+      <p id="versionNumber">Version: <%= @versionNumber %></p>
+    </div>
   </div>
-</div>
 </body>
 </html>
