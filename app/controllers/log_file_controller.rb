@@ -25,19 +25,23 @@ class LogFileController < ApplicationController
   # Take the given file and save it to disc.
   def save
     if current_user.can_upload_log? == true
-      uploaded_io = params[:log_file]
+      @uploaded_files = params[:log_file]
 
-      saved_filename = Rails.root.join('public', 'uploads', "#{Time.new.strftime("%Y-%m-%d-%H%M%S")}_#{uploaded_io.original_filename}")
+      
+      @uploaded_files.each{|uploaded_file| 
+        saved_filename = Rails.root.join('public', 'uploads', "#{Time.new.strftime("%Y-%m-%d-%H%M%S")}_#{uploaded_file.original_filename}")
 
-      Rails.logger.info "Saving uploaded file to #{saved_filename}"
+        Rails.logger.info "Saving uploaded file to #{saved_filename}"
 
-      File.open(saved_filename, 'wb') do |file|
-        file.write(uploaded_io.read)
-      end
+        File.open(saved_filename, 'wb') do |file|
+          file.write(uploaded_file.read)
+        end
 
+        Rails.logger.info "Saved uploaded file to #{saved_filename}"
+        
+      }
       processor = LogFileProcessor.new
 
-      Rails.logger.info "Saved uploaded file to #{saved_filename}"
       
       thr = Thread.new { processor.process_log_files() }
     else

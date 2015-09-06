@@ -3,6 +3,6 @@
 <p>Please upload your logfile here.</p>
 
 <%= form_tag({action: :save}, multipart: true) do %>
-  <p><%= file_field_tag 'log_file' %></p>
+  <p><%= file_field_tag 'log_file[]', multiple: true %></p>
   <p><%= submit_tag('Upload') %></p>
 <% end %>
