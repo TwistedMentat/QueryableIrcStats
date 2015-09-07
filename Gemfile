@@ -26,8 +26,9 @@ gem 'capistrano-rails', '~> 1.1'
 gem 'capistrano-passenger'
 gem 'capistrano-rvm'
 
-# Need to add this to a development group so that this is never added to production.
-gem 'byebug'
+group :development do
+    gem 'byebug'
+end
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
