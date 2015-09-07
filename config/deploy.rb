@@ -34,6 +34,10 @@ set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', '
 # Default value for keep_releases is 5
 # set :keep_releases, 5
 
+# Have bundler not install bundles in parallel. Run into a bundler bug.
+# https://github.com/bundler/bundler/issues/3692
+set :bundle_jobs, 1
+
 namespace :deploy do
 
   after :restart, :clear_cache do
