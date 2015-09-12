@@ -2,7 +2,7 @@ class HostnamesController < ApplicationController
   # GET /hostnames
   # GET /hostnames.json
   def index
-    @hostnames = Hostname.order("domain_name asc")
+    @hostnames = Hostname.order('domain_name asc')
 
     respond_to do |format|
       format.html # index.html.erb
@@ -22,6 +22,7 @@ class HostnamesController < ApplicationController
   end
 
   private
+
   def hostname_params
   end
 end

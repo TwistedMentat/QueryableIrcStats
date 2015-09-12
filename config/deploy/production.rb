@@ -7,8 +7,6 @@
 # server 'example.com', user: 'deploy', roles: %w{app web}, other_property: :other_value
 # server 'db.example.com', user: 'deploy', roles: %w{db}
 
-
-
 # role-based syntax
 # ==================
 
@@ -20,8 +18,7 @@
 # role :app, %w{deploy@example.com}, my_property: :my_value
 # role :web, %w{user1@primary.com user2@additional.com}, other_property: :other_value
 # role :db,  %w{deploy@example.com}
-role :web, %w{deploy@ec2-54-68-51-185.us-west-2.compute.amazonaws.com}
-
+role :web, %w(deploy@ec2-54-68-51-185.us-west-2.compute.amazonaws.com)
 
 # Configuration
 # =============
@@ -30,8 +27,6 @@ role :web, %w{deploy@ec2-54-68-51-185.us-west-2.compute.amazonaws.com}
 # For available Capistrano configuration variables see the documentation page.
 # http://capistranorb.com/documentation/getting-started/configuration/
 # Feel free to add new variables to customise your setup.
-
-
 
 # Custom SSH Options
 # ==================
@@ -46,9 +41,7 @@ role :web, %w{deploy@ec2-54-68-51-185.us-west-2.compute.amazonaws.com}
 #    forward_agent: false,
 #    auth_methods: %w(password)
 #  }
-set :ssh_options, {
-    keys: %w(/Users/James/.ssh/aws_deploy.pem)
-}
+set :ssh_options, keys: %w(/Users/James/.ssh/aws_deploy.pem)
 #
 # The server-based syntax can be used to override options:
 # ------------------------------------

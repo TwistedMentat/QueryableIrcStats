@@ -17,19 +17,17 @@ class LogFileController < ApplicationController
     else
       redirect_to :root
     end
-    
   end
-  
+
   # POST /log_files
-  # 
+  #
   # Take the given file and save it to disc.
   def save
     if current_user.can_upload_log? == true
       @uploaded_files = params[:log_file]
 
-      
-      @uploaded_files.each{|uploaded_file| 
-        saved_filename = Rails.root.join('public', 'uploads', "#{Time.new.strftime("%Y-%m-%d-%H%M%S")}_#{uploaded_file.original_filename}")
+      @uploaded_files.each do|uploaded_file|
+        saved_filename = Rails.root.join('public', 'uploads', "#{Time.new.strftime('%Y-%m-%d-%H%M%S')}_#{uploaded_file.original_filename}")
 
         Rails.logger.info "Saving uploaded file to #{saved_filename}"
 
@@ -38,12 +36,10 @@ class LogFileController < ApplicationController
         end
 
         Rails.logger.info "Saved uploaded file to #{saved_filename}"
-        
-      }
+      end
       processor = LogFileProcessor.new
 
-      
-      thr = Thread.new { processor.process_log_files() }
+      thr = Thread.new { processor.process_log_files }
     else
       logger.warn "The current user \"#{current_user.email}\" is not able to upload a file."
     end

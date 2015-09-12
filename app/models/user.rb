@@ -5,16 +5,16 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   # Setup accessible (or protected) attributes for your model
-  #attr_accessible :email, :password, :password_confirmation, :remember_me
+  # attr_accessible :email, :password, :password_confirmation, :remember_me
   # attr_accessible :title, :body
 
   belongs_to :group
 
   def can_upload_log?
-      if group.name == "log_uploader"
-          return true
-      else
-          return false
-      end
+    if group.name == 'log_uploader'
+      return true
+    else
+      return false
+    end
   end
 end

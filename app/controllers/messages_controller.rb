@@ -2,32 +2,28 @@ class MessagesController < ApplicationController
   # GET /messages
   # GET /messages.json
   def index
-    @messages = Message.where("said_at > ?", 3.months.ago).order("said_at ASC").paginate(:page => params[:page])
+    @messages = Message.where('said_at > ?', 3.months.ago).order('said_at ASC').paginate(page: params[:page])
 
-    @hourly_stats = Array.new
-    
-    (0..23).each{ |hour|
+    @hourly_stats = []
+
+    (0..23).each do |hour|
       hourly_stat = HourlyStats.new
       hourly_stat.hour = hour
-      hourly_stat.value = Message.where(:hour => hour).count
+      hourly_stat.value = Message.where(hour: hour).count
       @hourly_stats << hourly_stat
-    }
+    end
 
-    
-    @words_per_hour = Array.new
-    (0..23).each{ |hour|
+    @words_per_hour = []
+    (0..23).each do |hour|
       words_per_hour = HourlyStats.new
       words_per_hour.hour = hour
-      words_per_hour.value = 0;
-      Message.where(:hour => hour).each do |line|
-        if line.message == nil then
-          next
-        end
-        words_per_hour.value += line.message.squeeze(' ').split(%r{\s}).count
+      words_per_hour.value = 0
+      Message.where(hour: hour).each do |line|
+        next if line.message.nil?
+        words_per_hour.value += line.message.squeeze(' ').split(/\s/).count
       end
       @words_per_hour << words_per_hour
-    }
-
+    end
 
     respond_to do |format|
       format.html # index.html.erb

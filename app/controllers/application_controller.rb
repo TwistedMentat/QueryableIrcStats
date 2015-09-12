@@ -5,8 +5,8 @@ class ApplicationController < ActionController::Base
   private
 
   def set_revision
-      logger.debug 'Getting revision number'
-      @revisionNumber = `cat REVISION`
-      logger.debug 'revisionNumber is: ' + @revisionNumber
+    logger.debug 'Getting revision number'
+    @revision_number = `cat REVISION`
+    logger.debug 'revisionNumber is: ' + @revisionNumber
   end
 end

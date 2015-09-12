@@ -6,5 +6,5 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-uploader_group = Group.create(name: "log_uploader")
-User.create(email: "test@test.com", password: "Password123", password_confirmation: "Password123", group: uploader_group)
+uploader_group = Group.create(name: 'log_uploader')
+User.create(email: 'test@test.com', password: 'Password123', password_confirmation: 'Password123', group: uploader_group)
