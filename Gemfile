@@ -1,20 +1,19 @@
 source 'https://rubygems.org'
 
-gem "sass-rails", "~> 4.0.2"
+gem 'sass-rails', '~> 4.0.2'
 gem 'rails'
 gem 'coffee-rails'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
-
+    
 gem 'sqlite3'
-
 
 gem 'jquery-rails'
 
 gem 'will_paginate', '~> 3.0.0'
 
-gem 'rinku', '~> 1.7.0', :require => 'rails_rinku'
+gem 'rinku', '~> 1.7.0', require: 'rails_rinku'
 
 gem 'devise'
 
@@ -27,7 +26,8 @@ gem 'capistrano-passenger'
 gem 'capistrano-rvm'
 
 group :development do
-    gem 'byebug'
+  gem 'byebug'
+  gem 'rubocop', require: false
 end
 
 # To use ActiveModel has_secure_password
