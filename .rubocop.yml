@@ -1,0 +1,2 @@
+Metrics/LineLength:  
+  Max: 120 # Screens are wider now so it makes no sense to have the width at 80 anymore.
