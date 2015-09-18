@@ -1,3 +1,4 @@
+# The controller for the uploading of new log files to process
 class LogFileController < ApplicationController
   before_action :authenticate_user!
   # GET /log_file/
@@ -27,7 +28,10 @@ class LogFileController < ApplicationController
       @uploaded_files = params[:log_file]
 
       @uploaded_files.each do|uploaded_file|
-        saved_filename = Rails.root.join('public', 'uploads', "#{Time.new.strftime('%Y-%m-%d-%H%M%S')}_#{uploaded_file.original_filename}")
+        saved_filename = Rails.root.join(
+          'public',
+          'uploads',
+          "#{Time.new.strftime('%Y-%m-%d-%H%M%S')}_#{uploaded_file.original_filename}")
 
         Rails.logger.info "Saving uploaded file to #{saved_filename}"
 
@@ -39,7 +43,7 @@ class LogFileController < ApplicationController
       end
       processor = LogFileProcessor.new
 
-      thr = Thread.new { processor.process_log_files }
+      Thread.new { processor.process_log_files }
     else
       logger.warn "The current user \"#{current_user.email}\" is not able to upload a file."
     end

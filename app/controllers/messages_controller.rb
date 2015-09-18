@@ -1,3 +1,4 @@
+# Controller to handle message related actions.
 class MessagesController < ApplicationController
   # GET /messages
   # GET /messages.json

@@ -1,3 +1,4 @@
+# The core model that represents an IRC message.
 class Message < ActiveRecord::Base
   belongs_to :nick
 

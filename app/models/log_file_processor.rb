@@ -1,5 +1,6 @@
 require 'active_support/core_ext'
 
+# Contains all methods and actions needed to process a log file and add it into the database.
 class LogFileProcessor
   @day = 1
   @month = 'jan'

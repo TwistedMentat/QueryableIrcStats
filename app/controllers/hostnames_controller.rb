@@ -1,3 +1,4 @@
+# The controller for hostname related actions
 class HostnamesController < ApplicationController
   # GET /hostnames
   # GET /hostnames.json

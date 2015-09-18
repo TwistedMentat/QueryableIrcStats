@@ -1,2 +1,18 @@
+AllCops:
+  RunRailsCops: true
+
+AllCops:
+  Include:
+    - '**/Rakefile'
+    - '**/config.ru'
+  Exclude:
+    - 'db/**/*'
+    - 'config/**/*'
+    - 'script/**/*'
+    - !ruby/regexp /old_and_unused\.rb$/
+
 Metrics/LineLength:  
   Max: 120 # Screens are wider now so it makes no sense to have the width at 80 anymore.
+
+Metrics/MethodLength:
+  Max: 30 # 30 lines should easily fit on a screen. The default of 10 is tiny.

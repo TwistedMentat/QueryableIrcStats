@@ -1,3 +1,4 @@
+# Controller to handle nickname/handle related actions.
 class NicksController < ApplicationController
   # GET /nicks
   # GET /nicks.json
