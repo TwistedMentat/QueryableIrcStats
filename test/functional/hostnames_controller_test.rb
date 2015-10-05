@@ -2,7 +2,7 @@ require 'test_helper'
 
 class HostnamesControllerTest < ActionController::TestCase
   setup do
-    @hostname = hostnames(:one)
+    @hostname = hostnames(:hostname_one)
   end
 
   test 'should get index' do
@@ -14,14 +14,6 @@ class HostnamesControllerTest < ActionController::TestCase
   test 'should get new' do
     get :new
     assert_response :success
-  end
-
-  test 'should create hostname' do
-    assert_difference('Hostname.count') do
-      post :create, hostname: { domain_name: @hostname.domain_name }
-    end
-
-    assert_redirected_to hostname_path(assigns(:hostname))
   end
 
   test 'should show hostname' do
@@ -37,13 +29,5 @@ class HostnamesControllerTest < ActionController::TestCase
   test 'should update hostname' do
     put :update, id: @hostname, hostname: { domain_name: @hostname.domain_name }
     assert_redirected_to hostname_path(assigns(:hostname))
-  end
-
-  test 'should destroy hostname' do
-    assert_difference('Hostname.count', -1) do
-      delete :destroy, id: @hostname
-    end
-
-    assert_redirected_to hostnames_path
   end
 end

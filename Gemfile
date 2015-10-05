@@ -3,6 +3,7 @@ source 'https://rubygems.org'
 gem 'sass-rails', '~> 4.0.2'
 gem 'rails'
 gem 'coffee-rails'
+gem 'haml'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -28,6 +29,7 @@ gem 'capistrano-rvm'
 group :development do
   gem 'byebug'
   gem 'rubocop', require: false
+  gem 'rails-perftest'
 end
 
 # To use ActiveModel has_secure_password

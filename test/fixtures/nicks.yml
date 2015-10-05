@@ -2,10 +2,8 @@
 
 one:
   name: MyText
-  hostname: MyText
   username: MyText
 
 two:
   name: MyText
-  hostname: MyText
   username: MyText

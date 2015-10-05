@@ -1,4 +1,4 @@
-# Represents users in the application. 
+# Represents users in the application.
 # Users can be added to the uploaders group to upload new log files.
 class User < ActiveRecord::Base
   # Include default devise modules. Others available are:

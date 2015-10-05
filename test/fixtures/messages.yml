@@ -3,9 +3,9 @@
 one:
   nick: MyString
   message: MyText
-  saidAt: 2013-06-24 03:58:26
+  said_at: 2013-06-24 03:58:26
 
 two:
   nick: MyString
   message: MyText
-  saidAt: 2013-06-24 03:58:26
+  said_at: 2013-06-24 03:58:26

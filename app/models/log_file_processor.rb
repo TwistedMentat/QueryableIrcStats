@@ -1,6 +1,9 @@
 require 'active_support/core_ext'
 
 # Contains all methods and actions needed to process a log file and add it into the database.
+# Disabling this cop for this class as this class only does one thing at the moment. Processes a log file.
+# Should we update it in the future to do more then we can strip out the specific processing bits into their own files.
+# rubocop:disable ClassLength
 class LogFileProcessor
   @day = 1
   @month = 'jan'
@@ -45,18 +48,7 @@ class LogFileProcessor
           next
         end
 
-        line.match(/^(\d\d):(\d\d) <.(.*?)> (.*)/)
-
-        new_message = Message.new
-        nick = get_nick_with_just_name(Regexp.last_match(3))
-
-        new_message.nick = nick
-        new_message.message = Regexp.last_match(4)
-
-        record_time(Time.utc(@year, @month, @day, Regexp.last_match(1), Regexp.last_match(2)), new_message)
-        new_message.action = Action::SPEECH
-
-        new_message.save
+        process_speech(line)
 
         if Regexp.last_match(1).nil? || Regexp.last_match(2).nil? || @year.nil? || @month.nil? || @day.nil?
           log_unprocessable_line(line)
@@ -66,6 +58,24 @@ class LogFileProcessor
         log_unprocessable_line(line)
         next
       end
+    end
+  end
+
+  ##
+  # Process and create message entries for speech actions.
+  def process_speech(line)
+    if line.match(/^(\d\d):(\d\d) <.(.*?)> (.*)/)
+
+      new_message = Message.new
+      nick = get_nick_with_just_name(Regexp.last_match(3))
+
+      new_message.nick = nick
+      new_message.message = Regexp.last_match(4)
+
+      record_time(Time.utc(@year, @month, @day, Regexp.last_match(1), Regexp.last_match(2)), new_message)
+      new_message.action = Action::SPEECH
+
+      new_message.save
     end
   end
 

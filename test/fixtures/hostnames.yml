@@ -1,7 +1,7 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
-one:
+hostname_one:
   domain_name: MyString
 
-two:
+hostname_two:
   domain_name: MyString

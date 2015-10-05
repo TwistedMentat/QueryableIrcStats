@@ -8,7 +8,13 @@ class ApplicationController < ActionController::Base
 
   def set_revision
     logger.debug 'Getting revision number'
-    @revision_number = `cat REVISION`
-    logger.debug 'revisionNumber is: ' + @revisionNumber
+    
+    if File.exist?('REVISION')
+      @revision_number = `cat REVISION`
+    else
+      @revision_number = 'NotDeployed'
+    end
+
+    logger.debug 'revisionNumber is: ' + @revisionNumber.to_s
   end
 end
